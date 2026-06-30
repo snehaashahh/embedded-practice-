@@ -132,6 +132,18 @@ select, input[type=text], input[type=number]{ font-family:'JetBrains Mono',monos
 .quiz-opt.correct{ border-color:var(--cyan); background:rgba(94,234,212,.1); color:var(--cyan); }
 .quiz-opt.incorrect{ border-color:var(--red); background:rgba(255,107,107,.08); color:var(--red); }
 .quiz-opt:disabled{ cursor:default; }
+.quiz-fill{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.quiz-fill input[type=text]{ flex:1; min-width:160px; }
+.quiz-fill .quiz-fill-btn{ font-family:'JetBrains Mono',monospace; font-size:12px; padding:8px 14px; border-radius:6px;
+  background:rgba(94,234,212,0.1); border:1px solid var(--cyan); color:var(--cyan); cursor:pointer; }
+.quiz-fill .quiz-fill-btn:hover{ background:rgba(94,234,212,0.2); }
+.quiz-fill .quiz-fill-btn:disabled{ opacity:.4; cursor:default; }
+.quiz-fill-result{ margin-top:10px; padding:9px 12px; border-radius:6px; font-size:13px; line-height:1.55; border:1px solid var(--border); display:none; }
+.quiz-fill-result.correct{ border-left:3px solid var(--cyan); background:rgba(94,234,212,.08); color:var(--text-dim); }
+.quiz-fill-result.incorrect{ border-left:3px solid var(--red); background:rgba(255,107,107,.08); color:var(--text-dim); }
+.quiz-fill-result b{ color:var(--text); }
+.quiz-tag{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-mute);
+  border:1px solid var(--border-soft); border-radius:3px; padding:1px 6px; margin-left:8px; vertical-align:middle; }
 
 .qbank{ margin:16px 0; }
 .qcard{ border:1px solid var(--border); border-radius:8px; margin-bottom:14px; overflow:hidden; }
@@ -146,6 +158,36 @@ select, input[type=text], input[type=number]{ font-family:'JetBrains Mono',monos
 .qcard.exercise[open] summary::after{ content:'\2013 hide solution'; }
 .qcard.exercise summary{ color:var(--amber); }
 .qcard.exercise summary .qnum{ color:var(--amber); }
+.qcard.locked{ cursor:default; }
+
+/* ---- Active-recall practice boxes (wrap qcards) ---- */
+.practice-box{ border:1px solid var(--border); border-left:3px solid var(--violet); background:rgba(167,139,250,0.04);
+  border-radius:6px; padding:14px 16px 16px; margin:14px 0 10px; }
+.practice-box .practice-label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; color:var(--violet);
+  text-transform:uppercase; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.practice-box .practice-q{ font-size:14.5px; line-height:1.6; color:var(--text); margin:0 0 10px; }
+.practice-box .practice-q code{ background:rgba(94,234,212,0.08); }
+.practice-textarea{ width:100%; min-height:74px; resize:vertical; background:var(--bg); border:1px solid var(--border);
+  border-radius:6px; color:var(--text); font-family:'Source Serif 4',serif; font-size:14px; padding:10px 12px; line-height:1.5; }
+.practice-textarea:focus{ outline:none; border-color:var(--violet); }
+.practice-actions{ display:flex; gap:10px; margin-top:10px; align-items:center; flex-wrap:wrap; }
+.practice-btn{ font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.03em; border-radius:6px; padding:8px 14px;
+  cursor:pointer; transition:all .15s ease; border:1px solid var(--violet); background:rgba(167,139,250,0.12); color:var(--violet); }
+.practice-btn:hover{ background:rgba(167,139,250,0.22); }
+.practice-btn[disabled]{ opacity:.4; cursor:default; }
+.practice-skip{ font-family:'JetBrains Mono',monospace; font-size:11px; background:none; border:none; color:var(--text-mute);
+  cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
+.practice-skip:hover{ color:var(--text-dim); }
+.practice-feedback{ margin-top:12px; padding:10px 12px; border-radius:6px; font-size:13.5px; line-height:1.6; border:1px solid var(--border); }
+.practice-feedback.tier-strong{ border-left:3px solid var(--cyan); background:rgba(94,234,212,0.06); color:var(--text-dim); }
+.practice-feedback.tier-mid{ border-left:3px solid var(--amber); background:rgba(255,180,84,0.06); color:var(--text-dim); }
+.practice-feedback.tier-weak{ border-left:3px solid var(--pink); background:rgba(255,122,182,0.06); color:var(--text-dim); }
+.practice-feedback .fb-head{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:6px; }
+.practice-feedback.tier-strong .fb-head{ color:var(--cyan); } .practice-feedback.tier-mid .fb-head{ color:var(--amber); } .practice-feedback.tier-weak .fb-head{ color:var(--pink); }
+.term-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.term-chip{ font-family:'JetBrains Mono',monospace; font-size:11px; padding:2px 8px; border-radius:10px; border:1px solid var(--border); }
+.term-chip.hit{ color:var(--cyan); border-color:rgba(94,234,212,.4); background:rgba(94,234,212,.08); }
+.term-chip.miss{ color:var(--text-mute); border-color:var(--border); }
 
 .exblock{ border:1px solid var(--border); border-left:3px solid var(--amber); background:var(--panel); border-radius:6px; padding:16px 18px 4px; margin:22px 0; }
 .exblock .ex-label{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.1em; color:var(--amber); text-transform:uppercase; margin-bottom:8px; }
@@ -257,6 +299,12 @@ const UNITS = [
     <h4>Where the jobs actually are</h4>
     <p>"Embedded engineer" is a wide umbrella. In practice the role splits along a spectrum: <strong>firmware engineers</strong> write the C/C++ that runs directly on the chip (drivers, control loops, protocol stacks); <strong>embedded Linux engineers</strong> work one layer up, on devices powerful enough to run an OS (think a robot's onboard computer, not its motor controller); <strong>hardware/firmware bring-up engineers</strong> specialize in the messy first weeks of a new board, where nothing works yet and you don't know if it's the schematic, the solder joint, or the code; and <strong>validation/test engineers</strong> build the rigs and scripts that prove a design actually meets spec across temperature, voltage, and time. Job postings rarely use these exact labels, so read the listed responsibilities, not just the title.</p>
     <div class="callout"><div class="callout-label">Mental model</div>An embedded system is a feedback loop wearing a microcontroller as a brain: <strong>sense → decide → actuate</strong>, repeated forever, under a deadline. Nearly every system you'll build is some variation of that loop.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A team wants to add a feature to an insulin pump's firmware that occasionally takes 200ms to compute instead of its usual 2ms, with no other changes. Which of the four constraints above does that violate first, and why is "it's fast on average" not a defense for embedded code the way it might be for a website?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">It violates the <strong>real-time</strong> constraint first — a control loop or safety check that's supposed to run every few milliseconds doesn't get to occasionally take 100x longer just because the average is fine; the one slow pass is the one that matters, especially on a device administering medication. "Fast on average" is a web-app framing where an occasional slow page load is just annoying; on an embedded system with a hard deadline, a single late response can mean a missed dose timing window or a motor briefly running uncontrolled — the failure isn't graceful degradation, it's a correctness failure.</div>
+      </details>
+    </div>
   `},
   { id:'1-2', title:'Binary, Hex, Two\u2019s Complement & Why Registers Speak Hex', body:`
     <p>A microcontroller only knows two voltage levels — roughly 0V and 3.3V (or 5V on older parts) — labeled <strong>0</strong> and <strong>1</strong>. Every number, instruction, and piece of text inside the chip is ultimately a sequence of these bits. <strong>Binary</strong> is how a computer thinks; <strong>hexadecimal</strong> is how humans read binary without losing their minds.</p>
@@ -276,6 +324,12 @@ const UNITS = [
     <pre><span class="ty">int32_t</span> q8_value = (<span class="ty">int32_t</span>)(3.75 * 256);  <span class="cm">// store 3.75 as 960</span>
 <span class="cm">// to use it later: real_value = q8_value / 256.0</span></pre>
     <p>You'll see this constantly in DSP-adjacent firmware — sensor filters, control loops — anywhere float math would be too slow or the part has no FPU.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Convert <code>0xB6</code> to decimal two ways: first treating it as an <strong>unsigned</strong> 8-bit value, then as a <strong>signed</strong> <code>int8_t</code> (two's complement). Use the bit converter widget below to check your work once you've worked it out by hand.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Solution</span></summary>
+        <div class="answer"><code>0xB6</code> is <code>1011 0110</code> in binary. Unsigned: 128+32+16+4+2 = <strong>182</strong>. Signed: the top bit is 1, so it's negative — flip every bit (<code>0100 1001</code>), add 1 (<code>0100 1010</code> = 74), so the value is <strong>-74</strong>. Quick sanity check: for any negative two's-complement byte, signed = unsigned − 256, and 182 − 256 = -74 too.</div>
+      </details>
+    </div>
   `, widget:'bitConverter8' },
   { id:'1-3', title:'Digital Logic Essentials', body:`
     <p>Underneath every line of firmware is digital logic — gates built from transistors that combine bits by fixed rules. You don't design gates from scratch to write firmware, but you do read and write the bitwise operators that <em>are</em> those gates in software, because register manipulation is built entirely out of them.</p>
@@ -295,7 +349,14 @@ REG ^=  (1 &lt;&lt; 3);   <span class="cm">// toggle bit 3</span>
     <h4>Pull-up and pull-down resistors</h4>
     <p>An input pin that isn't actively driven high or low doesn't sit at a clean 0 or 1 — it <strong>floats</strong>, picking up noise from nearby wires and reading randomly. A <strong>pull-up resistor</strong> weakly ties the pin to the supply voltage so it reads HIGH by default, until something actively pulls it LOW (a classic pattern for buttons: pin reads HIGH normally, drops to LOW when pressed). A <strong>pull-down</strong> does the reverse. Nearly every GPIO peripheral lets you enable an internal pull-up/down in software so you don't need an external resistor for simple cases.</p>
     <div class="callout warn"><div class="callout-label">Practical gotcha</div>Forgetting a pull resistor on an unused input pin is a classic source of "ghost" behavior — a button that seems to randomly trigger, or a state machine that randomly jumps states, because the pin is reading electrical noise as real logic transitions.</div>
-  `},
+    <p>Flip the input switches below and watch each gate's output update live — this is the exact truth-table logic every bitwise operator above is built from.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Using the gate simulator above: set both inputs so that AND outputs 0 but OR outputs 1. Then, without touching the simulator, predict what XOR outputs for that same input combination — and explain why XOR and OR agree on three of the four possible input combinations but disagree on exactly one.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Any combination where the inputs differ (one 0, one 1) gives AND=0 and OR=1 — e.g. <code>0,1</code> or <code>1,0</code>. For that same input, XOR also outputs <strong>1</strong>, since XOR is "1 if bits differ." XOR and OR agree everywhere except the <code>1,1</code> case: OR(1,1)=1 because at least one input is 1, but XOR(1,1)=0 because the inputs don't differ. That single disagreement is the entire reason the two gates exist as separate operators rather than one — OR answers "is at least one true," XOR answers "is exactly one true."</div>
+      </details>
+    </div>
+  `, widget:'logicGateSim'},
   { id:'1-4', title:'C for Embedded: Pointers, volatile, Structs & Memory Discipline', body:`
     <p>Embedded C is a small, disciplined dialect of the language you may already know. A handful of habits separate it from "regular" application C.</p>
     <h4>Fixed-width types</h4>
@@ -326,7 +387,7 @@ GPIOA-&gt;ODR |= (1 &lt;&lt; 5);  <span class="cm">// reads exactly like the bit
     <p><strong>Bitfields</strong> (<code>unsigned x : 3;</code> inside a struct) let you name individual bit groups, but are best avoided for register access in production code — the C standard doesn't guarantee bit ordering or padding across compilers, so two toolchains can lay the same struct out differently. Explicit masks and shifts are slower to write but portable and unambiguous; most production codebases prefer them for exactly this reason.</p>
     <h4>const, static, and avoiding the heap</h4>
     <p><code>const</code> on a pointer parameter is a contract — "this function won't modify what you pointed me at" — and costs nothing at runtime, so use it liberally; it documents intent and lets the compiler catch mistakes. <code>static</code> on a function or file-scope variable restricts its visibility to that one file, the embedded equivalent of "private," and keeps your global namespace from turning into a junk drawer as a project grows.</p>
-    <p>Dynamic memory (<code>malloc</code>/<code>free</code>) is used sparingly or banned outright in much embedded code, for two compounding reasons: a failed allocation on a system with kilobytes of RAM is a real, frequent possibility (not a theoretical edge case), and repeated alloc/free cycles can <strong>fragment</strong> a small heap until a large-enough contiguous block simply can't be found anymore — a failure mode that can take hours of uptime to surface, which makes it brutal to debug. The common alternative is **static allocation**: declare buffers and structures up front, sized for the worst case, and never call malloc at all.</p>
+    <p>Dynamic memory (<code>malloc</code>/<code>free</code>) is used sparingly or banned outright in much embedded code, for two compounding reasons: a failed allocation on a system with kilobytes of RAM is a real, frequent possibility (not a theoretical edge case), and repeated alloc/free cycles can <strong>fragment</strong> a small heap until a large-enough contiguous block simply can't be found anymore — a failure mode that can take hours of uptime to surface, which makes it brutal to debug. The common alternative is <strong>static allocation</strong>: declare buffers and structures up front, sized for the worst case, and never call malloc at all.</p>
     <div class="callout warn"><div class="callout-label">Common bug</div>Forgetting <code>volatile</code> on a hardware register is one of the most common "it works in debug, hangs in release" bugs in embedded software, because optimizers get far more aggressive once optimization is turned on.</div>
     <div class="exblock"><div class="ex-label">Try it yourself</div>
       <p>A peripheral's status register lives at address <code>0x40013800</code>. Bit 7 is set to 1 by hardware when new data has arrived, and is cleared automatically when you read the data register. Write the C declaration for a pointer to that register, and a <code>while</code> loop that blocks until bit 7 is set. Then explain in one sentence why this code would be a bug without <code>volatile</code>.</p>
@@ -354,7 +415,14 @@ GPIOA-&gt;ODR |= (1 &lt;&lt; 5);  <span class="cm">// reads exactly like the bit
     <div class="callout warn"><div class="callout-label">Interview-relevant symptom</div>"A global variable is changing its value with no code that writes to it" is one of the most common embedded bug descriptions, and stack overflow corrupting adjacent memory is one of the first things to suspect — right alongside a missing <code>volatile</code> and an off-by-one array write.</div>
     <h4>Stack vs. heap, one more time</h4>
     <p>The <strong>heap</strong> (when used at all — see Lesson 1.4) is a separate region for dynamically allocated memory that outlives the function that created it, managed explicitly by <code>malloc</code>/<code>free</code> rather than automatically by the call/return mechanism. On a memory-constrained MCU, stack and heap are often configured to grow toward each other from opposite ends of RAM — which is exactly why an under-sized stack and heap fragmentation are both framed as the same underlying risk: running out of RAM in the middle, with nothing to stop one region from colliding into the other.</p>
-  `},
+    <p>Step through the call sequence below and watch frames get pushed onto the stack on each call, and popped off on each return.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Using the stack simulator above, step through a chain of three nested calls, then step through the returns. At the moment the deepest function is executing, how many stack frames are alive at once, and what specifically happens to the topmost frame the instant that function returns?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">All three frames are alive simultaneously — the caller's frame isn't removed just because it called something else, it's sitting underneath, waiting. The instant the deepest function returns, its frame is popped: the stack pointer moves back down past it, its local variables' memory is no longer reserved (now just unused RAM "above" the new top of stack, that could be the contents of leftover variables from the call that just ended), and execution resumes in the caller at the return address that frame was holding — which is also exactly the data a debugger reads to print a "call stack" backtrace after a crash.</div>
+      </details>
+    </div>
+  `, widget:'stackFrameSim'},
   { id:'1-6', title:'Macros & the Preprocessor', body:`
     <p>Before a single line of your C is compiled, it passes through the <strong>preprocessor</strong> — a dumb but powerful text-substitution pass that runs over your source file and acts on anything starting with <code>#</code>.</p>
     <pre><span class="cm">#define</span> MAX_RETRIES 5
@@ -371,6 +439,12 @@ GPIOA-&gt;ODR |= (1 &lt;&lt; 5);  <span class="cm">// reads exactly like the bit
 <span class="cm">#define</span> PRINT_VAR_NAME(X) printf("Name of the variable: " #X)
 <span class="cm">// the # operator turns the argument itself into a string literal, e.g. PRINT_VAR_NAME(sensor_count) prints "sensor_count"</span></pre>
     <div class="callout warn"><div class="callout-label">A classic macro bug</div><code>#define SQUARE(x) x*x</code> looks fine until you call <code>SQUARE(a+b)</code>, which expands to the text <code>a+b*a+b</code> — not <code>(a+b)*(a+b)</code> — because the preprocessor never adds the parentheses you'd assume a "function" would. Real macros wrap every parameter use in its own parentheses: <code>#define SQUARE(x) ((x)*(x))</code>. This exact failure mode is why many style guides prefer <code>const</code> (Lesson 1.9) or an inline function over a macro wherever either would work just as well.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Given <code>#define DOUBLE(x) x + x</code>, write out exactly what <code>int y = DOUBLE(3) * 2;</code> expands to as plain text, then compute the value that actually gets assigned to <code>y</code> — and the value a reasonable person would have expected.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">It expands by pure text substitution to <code>int y = 3 + 3 * 2;</code>. Multiplication binds tighter than addition, so this evaluates as <code>3 + (3 * 2) = 9</code>, not the expected <code>(3 + 3) * 2 = 12</code>. The fix is the same parenthesize-everything discipline from the SQUARE example: <code>#define DOUBLE(x) ((x) + (x))</code>, which expands safely to <code>((3) + (3)) * 2 = 12</code> regardless of what surrounds the macro call.</div>
+      </details>
+    </div>
   `},
   { id:'1-7', title:'Function Pointers & State Machines Built From Them', body:`
     <p>A <strong>function pointer</strong> is a variable that holds the address of a function rather than the address of a piece of data — and it can be called exactly like the function it points to.</p>
@@ -467,7 +541,13 @@ printf("%02x %02x %02x %02x\\n", nb.byte[0], nb.byte[1], nb.byte[2], nb.byte[3])
 <span class="cm">// on a little-endian system: 04 03 02 01 — see the endianness note below</span></pre>
     <h4>Endianness</h4>
     <p><strong>Big-endian</strong> stores the most-significant byte at the lowest memory address; <strong>little-endian</strong> (what most Cortex-M and x86 systems use by default) stores the least-significant byte first — which is exactly why the union example above prints the bytes of <code>0x01020304</code> in reversed order in a memory dump. This matters concretely whenever you parse a multi-byte value coming over a wire protocol (Unit 5) that doesn't match your CPU's native byte order — you must explicitly swap bytes, or every multi-byte field comes out wrong.</p>
-  `},
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A struct has members in this order: <code>char a; int b; char c;</code> on a system where <code>int</code> needs 4-byte alignment. Without using the simulator yet, predict the struct's total size (including any padding), then check yourself with the widget below.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Solution</span></summary>
+        <div class="answer"><code>a</code> takes byte 0, then 3 bytes of padding so <code>b</code> can start at the 4-byte-aligned offset 4, then <code>b</code> takes bytes 4–7, then <code>c</code> takes byte 8, then 3 more bytes of trailing padding so the struct's total size is itself a multiple of its largest member's alignment (4). Total: <strong>12 bytes</strong> — only 6 of which hold real data. Reordering to <code>int b; char a; char c;</code> would shrink this to 8 bytes by grouping the two 1-byte members together at the end.</div>
+      </details>
+    </div>
+  `, widget:'structPaddingSim' },
   { id:'1-9', title:'volatile, const & Compiler Optimization', body:`
     <p>You met <code>volatile</code> in Lesson 1.4 as "don't assume this register stays the same." Here's the fuller picture of what the compiler is actually doing, and why <code>const</code> and a few other tools matter alongside it.</p>
     <h4>What an optimizing compiler is allowed to do</h4>
@@ -561,7 +641,7 @@ ptr = &amp;x;                      <span class="cm">// any pointer type converts
         Now each segment between adjacent table points is treated as its own short straight line, so the overall result tracks a curved calibration table far more accurately &mdash; the more points the table has, the better a piecewise-linear approximation gets. For a large table where this linear scan becomes a real cost, a binary search over the (sorted) <code>x</code> array finds the bracketing pair in O(log n) instead of O(n).</div>
       </details>
     </div>
-  `},
+  `, widget:'interpolateSim' },
 ] },
 
 { id:'u2', title:'Unit 2 — The Microcontroller', lessons:[
@@ -575,6 +655,12 @@ ptr = &amp;x;                      <span class="cm">// any pointer type converts
       <li><strong>Buses &amp; clock tree</strong> — internal highways connecting the core to peripherals, plus a network of clock dividers letting different peripherals run at different speeds from one master oscillator.</li>
     </ul>
     <div class="callout"><div class="callout-label">Why this matters</div>Every peripheral you'll learn — GPIO, UART, ADC, timers, CAN — is the <em>same architectural idea</em> repeated: a block of hardware with its own registers, sitting on the bus, waiting for the CPU to configure it by writing specific bits to specific addresses. Learn that pattern once and every new peripheral becomes "which registers, which bits" rather than a new concept.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A coworker says "we're almost out of memory, let's just trim the program down." Which of the two on-chip memories (flash or SRAM) does that actually free up, and why might trimming program size do nothing at all for a crash that's actually caused by running out of the <em>other</em> one?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Shrinking the compiled program frees up <strong>flash</strong> — it's where the code itself lives. It does nothing for <strong>SRAM</strong> pressure, which holds variables, the stack, and the heap at runtime, sized completely independently of how big the compiled binary is. A small, tight program can still overflow its stack or exhaust its heap at runtime; a huge program with a tiny working set might never come close to filling SRAM. They're separate resources that happen to both be "memory," and a fix for one is frequently irrelevant to the other — worth checking which one a linker map or crash actually points to before "optimizing" the wrong thing.</div>
+      </details>
+    </div>
   `},
   { id:'2-2', title:'Memory-Mapped I/O & the Address Space', body:`
     <p>Here is the idea that unlocks the rest of this course: <strong>on most microcontrollers, hardware peripherals are accessed by reading and writing memory addresses</strong>, exactly like a variable. There's no special "talk to hardware" instruction — the CPU does an ordinary memory read or write, and that address happens to be wired to a peripheral instead of RAM. This scheme is called <strong>memory-mapped I/O</strong>.</p>
@@ -589,7 +675,14 @@ ptr = &amp;x;                      <span class="cm">// any pointer type converts
 <span class="ty">volatile uint32_t</span> *GPIOA_MODER = (<span class="ty">uint32_t</span>*)0x40020000;
 *GPIOA_MODER |= (1 &lt;&lt; 10);  <span class="cm">// set pin 5 to output mode — bits 11:10 control pin 5</span></pre>
     <p>In real projects you rarely write raw addresses — vendor headers wrap them in structs (Lesson 1.4), and HAL libraries wrap those into functions like <code>HAL_GPIO_WritePin(...)</code>. But every layer compiles down to exactly this: a write to a fixed address. When something doesn't behave as documented, dropping back down to "what bit, what register, what address" is almost always how you debug it.</p>
-  `},
+    <p>Click an address below to see which region of the map it falls into — the same lookup you'd do by hand reading a datasheet's memory map.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Using the map above, classify <code>0x40021400</code> and <code>0x20003F00</code> by region. Then explain: if a pointer bug accidentally writes through a garbage pointer that happens to land in the Peripheral region instead of SRAM, why is the resulting failure often much stranger than a normal memory-corruption bug?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer"><code>0x40021400</code> falls in the <strong>Peripheral</strong> region (0x4000 0000 range) — likely a register inside some peripheral block. <code>0x20003F00</code> falls in <strong>SRAM</strong> (0x2000 0000 range). A stray write into Peripheral space isn't "just" memory corruption — it can directly reconfigure real hardware: flipping a GPIO mode bit, changing a clock setting, or corrupting a peripheral's control register, none of which a debugger's "what variable got overwritten" view will show you, because nothing in your program's variables changed at all. The bug can manifest as a pin mysteriously toggling, a peripheral silently misbehaving, or even a clock misconfiguration that hangs the whole chip — symptoms that look nothing like a typical wild-pointer bug until you remember the address space itself is the clue.</div>
+      </details>
+    </div>
+  `, widget:'memoryMapSim'},
   { id:'2-3', title:'GPIO: Ports, Pins, Modes & Drive Types', body:`
     <p><strong>GPIO</strong> (General-Purpose Input/Output) is usually the first peripheral anyone touches, because it's the most direct: a pin the CPU can drive high, drive low, or read. Pins are grouped into <strong>ports</strong> (Port A, Port B, ...), each controlled by its own registers, with each pin a single bit position in those registers.</p>
     <ul>
@@ -621,6 +714,12 @@ ptr = &amp;x;                      <span class="cm">// any pointer type converts
     <div class="callout"><div class="callout-label">Why it's different from app development</div>There's no operating system loading your program on demand. Your firmware <em>is</em> the entire contents of the chip's memory — there's nothing else running underneath it (unless you've added an RTOS, Unit 6). That's also why a single bad pointer write can corrupt the program itself, not just crash a process — there's no OS keeping your code in its own sandboxed lane.</div>
     <h4>The vector table</h4>
     <p>The very first thing in flash is the <strong>vector table</strong> — a fixed array of addresses, the first being the initial stack pointer value, the second being the reset handler's address, followed by one entry per possible interrupt (Unit 3). The CPU reads this table directly out of hardware on power-up before a single line of your code runs, which is how it knows where to start and where to jump when each interrupt eventually fires.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>You add a large lookup table declared <code>const uint8_t table[4096] = {...};</code> to your firmware. Which linker section does it land in, does it consume any SRAM at runtime, and does its size count against your flash budget or your RAM budget?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">A <code>const</code>, initialized array lands in <code>.rodata</code> — flash, not RAM — because it's read-only and never needs a writable copy in SRAM the way an ordinary global does. It counts entirely against your <strong>flash budget</strong> and consumes essentially zero extra SRAM (the CPU reads it directly out of flash at runtime). Contrast that with a non-<code>const</code> initialized global of the same size: that one needs space in <code>.data</code>, which means a copy stored in flash <em>and</em> a writable copy in SRAM that the startup code copies in before <code>main()</code> runs — double-counted against both budgets, which is exactly why "just make it <code>const</code>" is a real, free optimization on RAM-starved chips.</div>
+      </details>
+    </div>
   `},
   { id:'2-5', title:'Clocks, Power Domains & the Watchdog Timer', body:`
     <p>Every digital circuit on the chip needs a clock signal to know when to update. Configuring that clock correctly is one of the very first things any firmware project does, and getting it wrong is a classic "nothing works and there's no obvious reason why" bug.</p>
@@ -631,6 +730,12 @@ ptr = &amp;x;                      <span class="cm">// any pointer type converts
     <h4>The watchdog timer (WDT)</h4>
     <p>A <strong>watchdog timer</strong> is a hardware countdown timer with one job: if it ever reaches zero, it forces a full chip reset. Firmware is responsible for periodically "kicking" (refreshing) it before that happens — and the entire point is that if the main loop ever hangs (an infinite loop, a deadlock, a fault that isn't otherwise caught), the kick code stops running, the watchdog isn't refreshed, and the chip resets itself back to a known-good state rather than staying stuck forever. It's a deliberately dumb, hardware-only safety net that exists precisely because software safety nets can themselves get stuck.</p>
     <p>Try it below: kick the dog to keep the system alive, or stop kicking and watch what happens.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>After playing with the simulator: your main loop normally takes 4 ms per pass, but occasionally calls a sensor read that can block for up to 40 ms in rare cases. You kick the watchdog once per loop pass, unconditionally. What watchdog timeout would you set, and why is setting it to something like 5 ms — "just a little above the normal case" — a mistake?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Set the timeout comfortably above the <strong>worst case</strong>, not the typical case — something like 60–100 ms, safely past the rare 40 ms sensor read, not 5 ms tuned to the common 4 ms pass. A watchdog timed to the average case will reset the chip during every legitimate slow-but-fine sensor read, which is worse than having no watchdog at all: it turns a rare, harmless delay into a guaranteed, recurring full reset, and can mask the very bug class (genuine hangs) the watchdog exists to catch by making resets look "normal."</div>
+      </details>
+    </div>
   `, widget:'watchdogSim' },
   { id:'2-6', title:'DMA: Moving Data Without the CPU', body:`
     <p><strong>DMA</strong> (Direct Memory Access) is a peripheral whose entire job is copying data from one memory location to another — peripheral register to RAM, RAM to RAM, RAM to peripheral register — without the CPU executing a single instruction per byte moved. You configure a source address, destination address, and length once; the DMA controller then runs the transfer in the background while the CPU goes on to do something else entirely, and optionally raises an interrupt only when the whole transfer is done.</p>
@@ -641,6 +746,12 @@ dma_configure(source = &amp;ADC1-&gt;DR, destination = sample_buffer, length = 2
 dma_start();
 <span class="cm">// CPU is now free — an interrupt fires only when all 256 samples have landed</span></pre>
     <div class="callout violet"><div class="callout-label">Where you'll meet this again</div>High-rate sensor sampling (an IMU or encoder polled every loop), audio/waveform generation via DAC, and bulk UART/SPI transfers are the three places DMA shows up constantly in real firmware — including, very likely, in any encoder or sensor pipeline running at the kind of rate a control loop needs.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A UART is receiving at 1 Mbps continuously. Roughly how many interrupts per second does a byte-at-a-time interrupt-driven receiver generate, versus a DMA setup using a 256-byte circular buffer with a half-complete/complete interrupt? What does that comparison tell you about why DMA matters more as data rate increases?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">At 1 Mbps (~125,000 bytes/sec), a byte-at-a-time interrupt scheme fires roughly <strong>125,000 interrupts/second</strong> — one per byte. A DMA setup with a 256-byte circular buffer firing on half-complete and complete fires roughly 125,000 ÷ 128 ≈ <strong>~980 interrupts/second</strong>, over two orders of magnitude fewer, because the DMA hardware silently absorbs every byte in between. At low data rates the difference barely matters; at high rates, the byte-at-a-time approach can consume so much CPU time just entering and exiting ISRs that little capacity is left for anything else — which is exactly why DMA's value scales with data rate rather than being a fixed, always-needed optimization.</div>
+      </details>
+    </div>
   `},
 ] },
 
@@ -661,6 +772,12 @@ dma_start();
 }</pre>
     <p>Larger systems often use <strong>hierarchical</strong> FSMs — a "Fault" superstate containing several fault sub-states, all of which share common entry behavior (cut power, log the cause) without duplicating that logic in every individual fault case. The core discipline scales: name every state honestly, including the ones nobody likes thinking about — fault, recovery, shutdown — not just the happy path.</p>
     <p>Step through the traffic-light FSM below — each click is one "tick," exactly like one pass through a firmware main loop.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Sketch (on paper or in words) an FSM for a microwave's door-and-start interlock: states should include at least <code>DOOR_OPEN</code>, <code>DOOR_CLOSED_IDLE</code>, and <code>RUNNING</code>. What event takes you from <code>RUNNING</code> straight back to <code>DOOR_OPEN</code>, and why must the transition table never allow a path from <code>DOOR_OPEN</code> directly into <code>RUNNING</code>?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">The door-opens event must force <code>RUNNING → DOOR_OPEN</code> immediately (and cut the magnetron) — that's a safety-critical transition, not a cosmetic one. <code>DOOR_OPEN</code> can never transition directly to <code>RUNNING</code> because the FSM's whole value is that illegal states are structurally unreachable: if "start" is only a valid event inside <code>DOOR_CLOSED_IDLE</code>, then "microwave running with the door open" isn't a bug you have to remember to prevent with a scattered <code>if</code> check somewhere — it's a state transition that simply doesn't exist in the table, which is exactly the provable-behavior guarantee FSMs are for.</div>
+      </details>
+    </div>
   `, widget:'fsmSim' },
   { id:'3-2', title:'Interrupts', body:`
     <p>A polling loop checks "has anything happened?" repeatedly, burning CPU time even when the answer is no. An <strong>interrupt</strong> flips that model: hardware notifies the CPU the instant something happens, the CPU pauses what it was doing, runs a small handler called an <strong>Interrupt Service Routine (ISR)</strong>, then resumes exactly where it left off — like a phone call interrupting whatever you were doing, picking back up exactly where you were once you hang up.</p>
@@ -674,6 +791,12 @@ dma_start();
     </ol>
     <div class="callout warn"><div class="callout-label">The rule everyone learns the hard way</div>Keep ISRs short. A long ISR blocks lower-priority interrupts and delays the main loop — exactly the kind of timing bug that's miserable to reproduce, since it depends on exactly when the interrupt fired relative to everything else.</div>
     <p>The timeline below shows why interrupts exist: the main loop is busy, but the moment a button-press interrupt fires, execution jumps to the ISR immediately, regardless of what the main loop was doing.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Watch the timeline simulator above fire an interrupt mid-loop. In your own words: what exactly does the CPU automatically save before jumping to the ISR, and what would go wrong on return if it didn't save that?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">The CPU automatically pushes the current <strong>program counter</strong> (where to resume), the <strong>processor status register</strong>, and a handful of general-purpose registers onto the stack before jumping to the ISR's vector table entry. Without saving this, the interrupted code couldn't resume where it left off — the program counter would need to be guessed, register values the main code was relying on mid-calculation would be silently overwritten by the ISR's own use of those same registers, and "resume exactly where it left off" (the whole point of an interrupt vs. a hard reset) would be impossible.</div>
+      </details>
+    </div>
   `, widget:'interruptSim' },
   { id:'3-3', title:'NVIC Priorities, Nesting & Critical Sections', body:`
     <p>Real systems have many interrupt sources competing for attention, and not all of them are equally urgent. The NVIC lets you assign each interrupt a numeric <strong>priority</strong> — lower numbers usually mean higher priority — and the hardware enforces the consequences automatically.</p>
@@ -688,7 +811,14 @@ shared_counter++;     <span class="cm">// guaranteed atomic now — nothing can 
 __disable_irq();
 __enable_irq();</pre>
     <div class="callout danger"><div class="callout-label">Why "shortest possible window" matters</div>Disabling interrupts even for a few extra microseconds can delay a time-critical event you don't even know is waiting — a UART byte that overruns its buffer, a control loop tick that arrives late. Critical sections should be measured in single-digit instructions, not milliseconds.</div>
-  `},
+    <p>Trigger interrupts at different priorities below and watch which ones preempt a currently-running ISR, and which ones simply wait their turn.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Using the simulator above: start a low-priority ISR running, then fire a higher-priority one while it's still executing, then fire a second low-priority one (same or lower priority than the first) during that same window. Predict the execution order before checking, then explain why the second low-priority interrupt has to wait even though it arrived before the high-priority ISR finished.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Order: low-priority ISR starts → high-priority ISR preempts it and runs to completion → low-priority ISR resumes and finishes → only then does the second, equal-or-lower-priority interrupt get to run. It has to wait because the NVIC's rule is about priority, not arrival order: a pending interrupt only preempts whatever's <em>currently running</em> if it's strictly higher priority than that running ISR. Once the first low-priority ISR resumes (having already preempted nothing else at its own level), the second low-priority interrupt remains merely "pending" until the CPU is free — it never gets to jump the queue just because it requested service first.</div>
+      </details>
+    </div>
+  `, widget:'nvicPrioritySim'},
   { id:'3-4', title:'Writing ISR-Safe Code', body:`
     <p>An ISR runs in a fundamentally different context than normal code, and several ordinary habits become dangerous inside one.</p>
     <ul>
@@ -728,7 +858,14 @@ __enable_irq();</pre>
       <tr><td>Best for</td><td>Predictable, frequent checks</td><td>Rare or time-critical events</td></tr></table>
     <p>A classic place both ideas collide is reading a mechanical button or switch. The metal contacts don't snap cleanly from open to closed — they physically bounce, producing a burst of spurious transitions in a few milliseconds. Read it naively and one "press" looks like five.</p>
     <p><strong>Debouncing</strong> fixes this, usually built as its own small FSM: an <code>IDLE</code> state waits for the first edge; a <code>DEBOUNCE</code> state ignores further changes for a short window (often 10–50 ms, timed with a timer interrupt); then a <code>PRESSED</code> state confirms the new value is stable before reporting it. It's a direct, practical fusion of everything in this unit: an event-driven trigger, a timer, and a state machine that refuses to trust a single noisy reading.</p>
-  `},
+    <p>Trigger a noisy physical press below and watch the debounce FSM ignore the bounce and report exactly one clean event.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>You're choosing between polling and interrupts for two jobs on the same chip: (1) checking a temperature sensor once every 10 seconds, (2) detecting a rapid emergency-stop button press that must be acted on within 1 ms. Pick polling or interrupt-driven for each, and justify the choice using the table above rather than just intuition.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Temperature every 10 seconds: <strong>polling</strong> — the event is predictable and infrequent, so there's no real cost to checking it directly in the main loop (or on a timer tick), and it avoids the added complexity and shared-state hazards interrupts bring for something this relaxed. Emergency stop: <strong>interrupt-driven</strong> — a 1 ms response requirement is exactly the "rare or time-critical" case interrupts exist for; polling could only guarantee that latency by looping fast enough to burn CPU constantly checking a button that's pressed almost never, which is wasteful and still only as fast as the loop period allows, not truly "near-immediate" the way a hardware interrupt is.</div>
+      </details>
+    </div>
+  `, widget:'debounceSim'},
 ] },
 
 { id:'u4', title:'Unit 4 — Talking to the World', lessons:[
@@ -749,6 +886,12 @@ HAL_UART_Transmit(&amp;huart2, (uint8_t*)data, sizeof(data), HAL_MAX_DELAY);
 HAL_UART_Receive(&amp;huart2, rx_buf, sizeof(rx_buf), HAL_MAX_DELAY);
 <span class="cm">// interrupt-driven receive — fires HAL_UART_RxCpltCallback() when 1 byte arrives</span>
 HAL_UART_Receive_IT(&amp;huart2, &amp;rx_byte, 1);</pre>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Using the frame builder above, set the baud rate to 9600 and send one byte. Roughly how long (in microseconds) does an 8N1 frame take to transmit at 9600 baud, counting the start and stop bits? Watch the waveform timing to check your arithmetic.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">9600 baud means 9600 bits/second, so one bit takes 1/9600 s ≈ 104 µs. An 8N1 frame is 1 start + 8 data + 1 stop = <strong>10 bits</strong>, so the whole frame takes roughly 10 × 104 µs ≈ <strong>1.04 ms</strong>. That's a useful number to have memorized: it tells you the absolute floor on how fast you can stream bytes at a given baud rate, before any software overhead.</div>
+      </details>
+    </div>
   `, widget:'uartSim' },
   { id:'4-2', title:'SPI: Synchronous, Fast, Point-to-Point', body:`
     <p><strong>SPI</strong> (Serial Peripheral Interface) trades UART's simplicity for speed by adding a shared clock line — no need to pre-agree on timing, and both sides can run much faster: SPI commonly runs tens of MHz versus UART's typical kilobits-to-low-megabits range.</p>
@@ -767,7 +910,13 @@ HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, 0);          <span class="cm">// CS low —
 HAL_SPI_Transmit(&amp;hspi1, (uint8_t*)&amp;tx_byte, 1, HAL_MAX_DELAY);
 HAL_SPI_Receive(&amp;hspi1, rx_buf, 1, HAL_MAX_DELAY);
 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, 1);          <span class="cm">// CS high — deselect</span></pre>
-  `},
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Toggle CPOL and CPHA in the simulator above and watch the clock idle level and sample edge change. A sensor's datasheet says "SPI Mode 3." Without looking it up, what CPOL/CPHA values does that correspond to, and what would you actually observe on a scope if your MCU were wired for Mode 0 instead?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Mode numbers are <code>CPOL,CPHA</code> read as a 2-bit number: Mode 0 = CPOL 0, CPHA 0; Mode 1 = CPOL 0, CPHA 1; Mode 2 = CPOL 1, CPHA 0; <strong>Mode 3 = CPOL 1, CPHA 1</strong> (clock idles high, data sampled on the second edge). Wired for Mode 0 against a Mode 3 device, the clock's idle level itself is already wrong (low instead of high) before a single bit is even clocked, so the slave reads bits relative to the wrong edges throughout — every byte arrives corrupted, even though SCLK, MOSI, MISO, and CS are all wired correctly.</div>
+      </details>
+    </div>
+  `, widget:'spiClockModeSim' },
   { id:'4-3', title:'I²C: Two Wires, Many Devices', body:`
     <p><strong>I²C</strong> (Inter-Integrated Circuit) solves a different problem than SPI: how to put many devices on a bus using only two wires total, no matter how many devices you add.</p>
     <ul>
@@ -793,7 +942,7 @@ HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, 1);          <span class="cm">// CS high �
     <pre><span class="cm">// STM32 HAL — the library handles ACK/NACK automatically</span>
 HAL_I2C_Master_Transmit(&amp;hi2c1, slave_addr, tx_data, sizeof(tx_data), HAL_MAX_DELAY);
 HAL_I2C_Master_Receive(&amp;hi2c1, slave_addr, rx_buf, sizeof(rx_buf), HAL_MAX_DELAY);</pre>
-  `},
+  `, widget:'i2cFrameSim' },
   { id:'4-4', title:'CAN Bus: Multi-Master Networking for Real Machines', body:`
     <p><strong>CAN</strong> (Controller Area Network) was built for automotive use and is now the default choice anywhere multiple boards on a real machine — a robot, a vehicle, an exoskeleton — need to talk reliably over distance, in electrically noisy environments, with no single point of failure. It's the protocol underneath most CAN-FD motor controller, BMS, and sensor-node communication you'll find on a robotics platform.</p>
     <h4>Differential signaling</h4>
@@ -803,6 +952,12 @@ HAL_I2C_Master_Receive(&amp;hi2c1, slave_addr, rx_buf, sizeof(rx_buf), HAL_MAX_D
     <h4>Built-in error handling</h4>
     <p>CAN nodes track their own error counts and can automatically demote themselves from active participation if they're causing persistent errors — a deliberate fault-containment feature that stops one malfunctioning node from being able to take down an entire bus shared by many others, which matters enormously on a vehicle or robot where one bad sensor board shouldn't be able to silence the whole network.</p>
     <p>Watch two nodes race for the bus below — enter two different IDs and see exactly which bit position decides the winner.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Using the arbitration simulator above, race ID <code>0x0A1</code> against ID <code>0x0A3</code>. Before checking, predict which one wins and why — then describe what physically happens to the losing node's transmission (does it get corrupted, or does something else happen to it?).</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer"><code>0x0A1</code> wins — lower numeric ID is dominant in CAN's bitwise arbitration, and the two IDs only differ in the low bits where <code>0x0A1</code> has more dominant (0) bits at the comparison point. The losing node's message isn't corrupted at all: the instant it transmits a recessive bit but reads a dominant bit back off the bus, it detects it has lost arbitration, stops transmitting immediately, and automatically retries once the bus goes idle again — no data is lost or garbled, it's simply deferred, which is what makes CAN collision-free rather than collision-recovering like Ethernet's older CSMA/CD scheme.</div>
+      </details>
+    </div>
   `, widget:'canBusSim' },
   { id:'4-5', title:'Choosing the Right Protocol', body:`
     <p>With four protocols covered, here's the decision table that interview "design a system" questions are usually testing for:</p>
@@ -812,6 +967,12 @@ HAL_I2C_Master_Receive(&amp;hi2c1, slave_addr, rx_buf, sizeof(rx_buf), HAL_MAX_D
       <tr><td>Several low-speed sensors, minimal wiring</td><td>I²C</td><td>Built-in addressing scales to many devices on 2 wires</td></tr>
       <tr><td>Multiple boards across a noisy, longer-distance system</td><td>CAN</td><td>Differential signaling + arbitration + fault containment</td></tr></table>
     <p>None of these are mutually exclusive in one system — it's extremely common for a single board to use SPI for a fast IMU, I²C for a handful of slower sensors, UART for a debug console, and CAN to report up to the rest of the vehicle or robot, all at once. Part of the job is recognizing which constraint — speed, wire count, distance, noise, number of devices — actually dominates for a given link, rather than reaching for one protocol out of habit.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>You're designing a small mobile robot: a 6-axis IMU that needs to be sampled at 1 kHz, eight low-rate environment sensors (temperature, light, distance) updated a few times a second on a board with very limited GPIO pins, and a 2-meter cable run to a separate motor-controller board in an electrically noisy chassis. Pick a protocol for each link and justify each choice in one sentence.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">IMU: <strong>SPI</strong> — needs the highest throughput and lowest latency of the three links, and it's a single high-priority device where SPI's extra wire-per-device cost isn't a problem. Eight environment sensors: <strong>I²C</strong> — low speed is fine, and built-in addressing lets all eight share just two wires instead of burning a precious GPIO pin per device. Motor-controller link: <strong>CAN</strong> — the combination of a longer cable run and an electrically noisy environment is exactly CAN's differential-signaling use case, where UART or SPI's single-ended signaling would be far more vulnerable to noise over that distance.</div>
+      </details>
+    </div>
   `},
 ] },
 
@@ -825,6 +986,12 @@ HAL_I2C_Master_Receive(&amp;hi2c1, slave_addr, rx_buf, sizeof(rx_buf), HAL_MAX_D
     <pre><span class="cm">// STM32 HAL</span>
 HAL_DAC_Start(&amp;hdac, DAC_CHANNEL_1);
 HAL_DAC_SetValue(&amp;hdac, DAC_CHANNEL_1, DAC_ALIGN_12B_R, value);</pre>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A 10-bit DAC has a 5V reference. What digital value should you write to get an output as close as possible to 3.0V? Work it out by rearranging the formula above, then check your arithmetic.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Rearranging: <code>digital_value = (output_voltage / v_ref) * (2^n - 1)</code>. With n=10, 2¹⁰-1 = 1023. <code>(3.0 / 5.0) * 1023 = 613.8</code>, which rounds to <strong>614</strong>. Writing 614 produces <code>(614/1023) * 5.0 ≈ 3.001V</code> — the small gap from exactly 3.0V is unavoidable quantization error (Lesson 5.2), the same phenomenon in reverse: a DAC can only land on one of 1024 discrete output levels, not an arbitrary continuous voltage.</div>
+      </details>
+    </div>
   `},
   { id:'5-2', title:'ADC: Sampling, Resolution & Why Sample Rate Matters', body:`
     <p>An <strong>Analog-to-Digital Converter (ADC)</strong> does the reverse: measures a voltage and reports the closest representable digital number. This is how firmware reads anything continuous — a potentiometer, a temperature sensor, a strain gauge, an IMU's analog front end.</p>
@@ -840,6 +1007,12 @@ HAL_ADC_Start(&amp;hadc1);
 HAL_ADC_PollForConversion(&amp;hadc1, HAL_MAX_DELAY);
 uint32_t adc_value = HAL_ADC_GetValue(&amp;hadc1);
 HAL_ADC_Stop(&amp;hadc1);</pre>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A 12-bit ADC has a reference voltage of 3.3V. What is the smallest voltage change it can distinguish (its quantization step)? If the ADC reads a raw value of <code>2048</code>, what voltage does that correspond to? Use the aliasing simulator above to build intuition first, then work this part out on paper.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">A 12-bit ADC has 2¹² = 4096 discrete steps, so the step size is 3.3V / 4096 ≈ <strong>0.8 mV</strong> per least-significant bit. A raw reading of 2048 is exactly half of 4095 (the max code), so the voltage is roughly 2048/4096 × 3.3V ≈ <strong>1.65V</strong> — right at mid-scale, which makes sense since 2048 = 2¹¹, the halfway point of a 12-bit range.</div>
+      </details>
+    </div>
   `, widget:'adcSim' },
   { id:'5-3', title:'Timers & PWM', body:`
     <p>A hardware <strong>timer</strong> is a peripheral that counts clock pulses independently of the CPU and can trigger an action — an interrupt, a pin toggle — when the count hits a target, without the CPU babysitting it in a loop. Timers underpin precise timing in firmware: elapsed-time measurement, periodic interrupts, and one of the most common embedded outputs, <strong>PWM</strong>.</p>
@@ -863,7 +1036,14 @@ HAL_ADC_Stop(&amp;hadc1);</pre>
     <h4>Anti-aliasing filters</h4>
     <p>Lesson 5.2 covered aliasing as a sampling-rate problem, but it's also fixed in analog, before the ADC ever sees the signal: a simple <strong>low-pass RC filter</strong> (a resistor and capacitor) placed ahead of the ADC input attenuates frequencies above the Nyquist limit, so there's nothing left to fold back and alias even if a stray high-frequency noise spike sneaks onto the line. Production sensor front-ends almost always pair a hardware anti-aliasing filter with an appropriately chosen sample rate — relying on sample rate alone is fragile against noise the designer didn't anticipate.</p>
     <div class="callout"><div class="callout-label">Where this connects back</div>This is the same RC low-pass idea, just applied to continuous noise instead of mechanical bounce, as the timer-based debounce window from Lesson 3.5 — "filter out the fast stuff you don't trust, keep the slow stuff you do" is a pattern that recurs across the analog and digital sides of this field equally.</div>
-  `},
+    <p>Drag the window size below and watch a simple moving-average filter smooth a noisy signal — the digital-side cousin of the analog RC filter described above.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Using the filter widget above, push the averaging window very large. The noise disappears almost completely — but what do you lose along with it, and why would that make a very large window a bad choice for, say, a fast-moving robot's distance sensor even though it gives the "cleanest" reading?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">A large averaging window trades noise rejection for <strong>responsiveness</strong> — it also smooths out genuine, fast changes in the real signal, not just noise, introducing lag between what's actually happening and what the filtered value reports. For a fast-moving robot's distance sensor, that lag means the filtered reading reflects where an obstacle <em>was</em> several samples ago rather than where it is now — exactly the kind of stale data that can turn "smooth, clean sensor input" into "the robot reacted too late." Filter window size is a real engineering tradeoff (noise rejection vs. latency), not a "bigger is always better" knob.</div>
+      </details>
+    </div>
+  `, widget:'filterSim'},
   { id:'5-5', title:'PID Controllers: Closing the Loop', body:`
     <p>A PID controller is the most common way firmware turns "where I am" and "where I want to be" into a continuous, well-behaved correction signal — driving a motor's PWM duty cycle to hold a position, a heater's output to hold a temperature, or a drone's motor speeds to hold an attitude. It's the practical, working version of the abstract sense → decide → actuate loop from Lesson 1.1.</p>
     <h4>The pieces</h4>
@@ -904,7 +1084,7 @@ HAL_ADC_Stop(&amp;hadc1);</pre>
         <div class="answer">Try lowering <strong>Kp</strong> first (it's the term most directly responsible for an aggressive, overshooting response to a large error) and/or raising <strong>Kd</strong> (the derivative term specifically damps overshoot by reacting to how fast the error is closing). Leave <strong>Ki</strong> alone for this specific symptom — it governs steady-state accuracy once you're already near target, which the problem states is already working fine; changing it risks reintroducing steady-state error without addressing the actual overshoot.</div>
       </details>
     </div>
-  `},
+  `, widget:'pidLiveSim' },
 ] },
 
 { id:'u6', title:'Unit 6 — Systems & RTOS', lessons:[
@@ -919,6 +1099,12 @@ HAL_ADC_Stop(&amp;hadc1);</pre>
       <li><strong>WCET (Worst-Case Execution Time)</strong> — the longest a piece of code could possibly take, accounting for every branch and every interrupt that could interleave with it. Real-time systems are designed around WCET, not average-case time, because the one time it runs slow is the time that matters.</li>
     </ul>
     <div class="callout"><div class="callout-label">Why this connects to earlier units</div>This is the formal version of the constraint from Lesson 1.1 — and the reason ISRs stay short (3.2), interrupt priorities exist (3.3), and control loops are timed by hardware timers instead of approximate delay loops.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A control loop's average execution time is 0.3 ms against a 1 ms deadline — comfortably fast on average. Why is that number, by itself, not enough to call the system real-time, and what number would you actually need from the team before signing off?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Average execution time says nothing about the <strong>worst case</strong> — a rare branch, a cache miss, a higher-priority interrupt preempting mid-loop, or a longer code path triggered by an edge-case input could all push a single pass well past 1 ms even if the average is 0.3 ms. What actually matters for real-time correctness is the <strong>WCET</strong> (worst-case execution time), measured or bounded under the worst realistic combination of conditions — not timed under typical conditions and hoped to generalize. A system is real-time only if its WCET, not its average, fits inside the deadline.</div>
+      </details>
+    </div>
   `},
   { id:'6-2', title:'RTOS Basics: Tasks and Scheduling', body:`
     <p>So far, every example assumed one single <code>while(1)</code> main loop doing everything, with interrupts occasionally cutting in. That works for simple systems, but gets unwieldy once several genuinely independent jobs run at different rates — sampling a sensor every 1ms, updating a display every 100ms, blinking a status LED every second — all sharing one CPU.</p>
@@ -931,6 +1117,12 @@ HAL_ADC_Stop(&amp;hadc1);</pre>
     <h4>Preemptive vs. cooperative scheduling</h4>
     <p>In a <strong>preemptive</strong> scheduler (what FreeRTOS uses by default), a higher-priority task that becomes ready will interrupt a lower-priority task immediately, mid-instruction-stream — the same forced-preemption idea as interrupt nesting (Lesson 3.3), one layer up. In a <strong>cooperative</strong> scheduler, a task keeps the CPU until it voluntarily yields, which is simpler to reason about (no mid-function preemption to worry about) but means one badly-behaved task can starve everything else indefinitely — a tradeoff worth knowing even though preemptive is the practical default in almost all modern embedded RTOSes.</p>
     <p>Watch the simulated scheduler below run three tasks at three different priorities and periods, and see exactly when each one gets the CPU.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>In the scheduler simulator above, give one task the highest priority and a long execution time, then watch what happens to the lower-priority tasks' actual run times versus their intended periods. In your own words: what does it mean for a lower-priority task to be "starved," and is that the scheduler malfunctioning or working exactly as designed?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Starvation is a lower-priority task being ready to run but never actually getting CPU time because a higher-priority task (or several) is always ready first — and under a strict preemptive priority scheduler, that's <strong>working exactly as designed</strong>, not a bug: "always run the highest-priority ready task" necessarily means a lower-priority task gets nothing as long as a higher one keeps being ready. This is precisely why real systems cap how long any single high-priority task is allowed to hog the CPU (keeping work bounded, yielding or blocking regularly) rather than relying on the scheduler alone to guarantee fairness — fairness was never the scheduler's job, priority order was.</div>
+      </details>
+    </div>
   `, widget:'rtosSim' },
   { id:'6-3', title:'FreeRTOS in Practice: Queues, Semaphores & ISR-Safe APIs', body:`
     <p>Tasks rarely work in total isolation — they need to pass data and coordinate with each other and with ISRs. FreeRTOS (and RTOSes generally) provide a small set of primitives for exactly this.</p>
@@ -961,7 +1153,14 @@ sample_count++;  <span class="cm">// NOT atomic on most MCUs: read, add 1, write
 <span class="cm">// if the ISR fires mid-increment from the main loop, an increment can be lost</span></pre>
     <p>A <strong>mutex</strong> is the standard fix (Lesson 6.3): a task must take it before touching shared data and give it back when done, and the RTOS guarantees only one task holds it at a time.</p>
     <p>Mutexes introduce their own classic failure mode worth knowing by name: <strong>priority inversion</strong>. A low-priority task takes a mutex; a high-priority task needs that same mutex and has to wait; but a medium-priority task — needing neither — keeps preempting the low-priority task, so the low-priority task never finishes and never releases the lock the high-priority task is waiting on. The net effect: a high-priority task is effectively blocked by a medium-priority one that has nothing to do with it. This exact bug nearly doomed the Mars Pathfinder mission in 1997, and is the practical reason most production RTOSes implement <strong>priority inheritance</strong> — temporarily boosting the low-priority task's priority while it holds a mutex someone more important is waiting on, exactly long enough to let it finish and release the lock.</p>
-  `},
+    <p>Run the unsynchronized version below a few times and watch <code>shared_counter</code> land below the expected total — then compare it against the critical-section version, which always lands exactly right.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Three tasks: Low (priority 1) holds a mutex. High (priority 3) is blocked waiting for it. Medium (priority 2) has no interest in the mutex at all but is CPU-bound and keeps becoming ready. Walk through what happens <em>with</em> priority inheritance enabled versus <em>without</em> it, focusing on what changes for Low's effective priority the moment High starts waiting.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer"><strong>Without</strong> inheritance: Medium keeps preempting Low (priority 2 beats priority 1) indefinitely, so Low never finishes its critical section, never releases the mutex, and High — despite being the highest priority task in the system — sits blocked behind a task that isn't even involved. <strong>With</strong> inheritance: the instant High blocks on Low's mutex, the RTOS temporarily raises Low's effective priority to match High's (priority 3), so Medium (priority 2) can no longer preempt it. Low finishes its critical section, releases the mutex, drops back to its real priority 1, and High immediately acquires the mutex and proceeds — Medium's interference is removed from the picture entirely during that window.</div>
+      </details>
+    </div>
+  `, widget:'raceConditionSim'},
   { id:'6-5', title:'POSIX Threads, Mutexes & Semaphores: The Same Ideas at the OS Level', body:`
     <p>Lessons 6.2&ndash;6.4 covered concurrency from inside an RTOS task scheduler. The exact same underlying problems &mdash; shared data, mutual exclusion, signaling between concurrent contexts &mdash; show up again, with concrete OS-provided APIs, the moment you're writing multi-threaded C against a full operating system instead of bare metal: embedded Linux, a host-side test harness, or any tooling that runs on your development machine rather than the target MCU. Knowing the POSIX threading API (<strong>pthreads</strong>) by name is worth it both for embedded Linux roles and because it makes the abstract RTOS concepts concrete with real, runnable code.</p>
     <h4>Creating and joining threads</h4>
@@ -1030,7 +1229,7 @@ counter++;   <span class="cm">// guaranteed atomic &mdash; no lock needed, no tw
         <div class="answer">A <strong>semaphore initialized to 2</strong>. A mutex only ever allows one holder, which is too restrictive here since two threads are genuinely allowed to run concurrently. A spinlock is about <em>how</em> a thread waits (busy vs. asleep), not about how many holders are allowed at once, and is the wrong dimension to reach for here. A semaphore initialized to the actual resource count is exactly the "N interchangeable resources" pattern it exists for: each thread calls <code>sem_wait</code> before using an accelerator (blocking once both are in use) and <code>sem_post</code> once it's done, with no ownership tracking required since any of the three threads releasing one accelerator is equally valid.</div>
       </details>
     </div>
-  `},
+  `, widget:'semaphorePoolSim' },
 ] },
 
 { id:'u7', title:'Unit 7 — Memory, Storage & Firmware Updates', lessons:[
@@ -1058,6 +1257,12 @@ counter++;   <span class="cm">// guaranteed atomic &mdash; no lock needed, no tw
     <p>Production update systems typically pair this with a "first boot" health check: the new firmware must prove it's actually working — for instance, by successfully completing some self-test or checking in with a server — within a short window after switching banks, or the bootloader automatically <strong>rolls back</strong> to the previous known-good bank on the next reset. Without this, a firmware image that compiles and flashes fine but has a fatal logic bug can permanently brick every device in the field the moment the update ships — exactly the failure mode dual-bank-plus-rollback exists to prevent.</p>
     <h4>DFU vs. OTA</h4>
     <p><strong>DFU</strong> (Device Firmware Update) usually refers to a wired update over USB or a debug interface; <strong>OTA</strong> (Over-The-Air) means the new image arrives wirelessly — Wi-Fi, BLE, cellular. The bank-switching and rollback logic underneath is largely the same regardless of transport; what differs is how the image gets into the inactive bank in the first place, and OTA introduces its own concerns (Unit 8: is this firmware image actually authentic, and was it actually meant for this device?).</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A device loses power exactly halfway through writing a new firmware image, under a single-bank (no A/B) update scheme that erases the old firmware before writing the new one. What state is the device in on its next boot, and how does dual-bank specifically prevent that exact outcome?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Under single-bank, the device is now <strong>bricked</strong>: the old firmware was already erased to make room, and the new firmware is only half-written, so there's no valid, complete image anywhere in flash for the bootloader to jump into — the device needs a physical recovery procedure (or is permanently dead if there's no such procedure). Dual-bank prevents this specifically because the new image is written into the <em>inactive</em> bank while the working, currently-active bank is never touched — a power loss mid-write just leaves a half-written inactive bank, which the bootloader simply ignores and never switches to, so the device boots normally into the still-intact previous version on its next power-up.</div>
+      </details>
+    </div>
   `},
 ] },
 
@@ -1091,6 +1296,12 @@ counter++;   <span class="cm">// guaranteed atomic &mdash; no lock needed, no tw
     <p>Unit tests with mocked hardware verify your logic, but not whether your logic correctly drives the <em>real</em> peripherals, with real timing, real electrical behavior, real edge cases a mock can't anticipate. <strong>HIL testing</strong> runs the actual compiled firmware on actual target hardware, but with real-world inputs and outputs replaced by a test rig that can inject precise, repeatable signals (a simulated sensor fault, a precisely-timed CAN message, a brown-out event) and automatically check the firmware's response — the standard way safety-relevant embedded systems get continuous, automated regression testing against real silicon rather than relying on manual bench testing alone.</p>
     <h4>Static analysis and MISRA-C</h4>
     <p><strong>Static analysis</strong> tools scan source code without running it, flagging patterns known to cause real bugs — uninitialized variables, suspicious implicit type conversions, unreachable code, certain classes of buffer overrun. <strong>MISRA-C</strong> is a widely-adopted coding standard, originally from the automotive industry, that restricts C to a safer, more predictable subset — banning or constraining constructs known to be error-prone or behaviorally ambiguous across compilers (certain pointer arithmetic patterns, implicit type conversions, unbounded recursion) — and static analyzers are commonly configured to enforce it automatically as part of a build. You'll see MISRA-C referenced constantly in automotive, medical, and aerospace firmware job postings specifically.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A bug only reproduces when a sensor's SPI transaction takes longer than 2 µs due to real bus loading, racing against a timer interrupt. Which of the three strategies above — unit tests with mocks, HIL, or static analysis — is actually capable of catching this, and why do the other two structurally miss it?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Only <strong>HIL testing</strong> can catch this reliably, because it's a real timing race involving actual electrical/bus behavior — a mock has no concept of "how long did this SPI transaction actually take in microseconds," so a unit test can verify the logic is correct without ever exercising the timing condition that triggers the bug. Static analysis examines source code structure, not runtime timing, so it has no way to flag a race that only depends on how long an external bus transaction happens to take under real loading. This is exactly why all three layers are normally used together rather than any single one being "enough": each one is structurally blind to certain bug classes the others catch.</div>
+      </details>
+    </div>
   `},
   { id:'8-3', title:'Functional Safety Basics: Why Some Industries Need Certified Process', body:`
     <p>In safety-relevant industries, "we tested it and it worked" isn't sufficient evidence on its own — regulators and customers require a documented, auditable <strong>process</strong> proving the development methodology itself reduces risk to an acceptable level, not just that the shipped artifact happened to pass its tests.</p>
@@ -1103,6 +1314,12 @@ counter++;   <span class="cm">// guaranteed atomic &mdash; no lock needed, no tw
     <h4>Redundancy as a core safety pattern</h4>
     <p>A recurring theme across all of these standards: for sufficiently severe hazards, a single point of failure — one sensor, one MCU, one code path — usually isn't acceptable. Common patterns include dual-redundant sensors with a voting or plausibility-check scheme between them, a separate independent safety MCU that can override the primary controller, and watchdog-style monitors (Lesson 2.5, generalized) that verify the main system is behaving sanely and can force a safe state if it isn't.</p>
     <div class="callout violet"><div class="callout-label">Why this is worth knowing even outside regulated industries</div>You don't need to memorize ASIL tables to benefit from this mental model. "What's the failure mode if this single sensor reads garbage? What's the failure mode if this one MCU locks up?" is a genuinely useful design question for any control system, exoskeleton firmware included — and being able to talk about it fluently is a real interview signal, not just regulatory trivia.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>An exoskeleton's single force sensor feeds directly into a motor torque command, with no redundancy and no plausibility check. Propose one specific design change inspired by the redundancy patterns above, and explain what concrete failure it would catch that the current design can't.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">One concrete option: add a second, independent force sensor and a simple plausibility check — if the two readings diverge by more than some threshold, force a safe state (cut or limit torque) rather than trusting either reading blindly. This specifically catches a single-sensor failure mode the current design is structurally blind to: a sensor that reads a plausible-looking but wrong value (a stuck reading, a partial short, a connector going intermittent) — the system has no way to know the value is wrong unless it has something to compare it against, since "the number is in range" and "the number is correct" are not the same guarantee.</div>
+      </details>
+    </div>
   `},
 ] },
 
@@ -1135,6 +1352,12 @@ counter++;   <span class="cm">// guaranteed atomic &mdash; no lock needed, no tw
       <li><strong>Unsigned firmware updates</strong> — without secure boot, any OTA or DFU mechanism (Lesson 7.2) becomes a route to install attacker-controlled firmware with full system privileges.</li>
     </ul>
     <p>Most MCU vendors now ship dedicated silicon features for this — read-out protection that disables debug access once enabled, hardware crypto accelerators, secure key storage — specifically because retrofitting security after a product design is finalized is far harder than designing it in from the start.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A product ships with secure boot enabled (signature checked, unsigned images rejected) but the SWD debug port is left fully active in the production build. What can an attacker with brief physical access still accomplish despite secure boot being correctly implemented?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Secure boot only guards the path of "load a new application image through the normal update mechanism" — it does nothing to stop an attacker who can talk to the chip directly over a live SWD port. With debug access open, an attacker can halt the CPU, dump the entire flash contents (including proprietary code and any keys not stored in dedicated protected hardware), single-step or modify running code in RAM, or reprogram the chip through the debug interface entirely outside the signature-checked boot path. Secure boot and disabling/locking debug access in production are complementary, not substitutes — one without the other leaves a real, commonly-exploited gap.</div>
+      </details>
+    </div>
   `},
 ] },
 
@@ -1152,7 +1375,13 @@ counter++;   <span class="cm">// guaranteed atomic &mdash; no lock needed, no tw
     <h4>How data moves through the hierarchy</h4>
     <p>When the CPU needs a value, it checks the closest cache first. A <strong>cache hit</strong> returns the value immediately from that fast layer; a <strong>cache miss</strong> means checking the next layer out, all the way down to RAM if necessary — and the dedicated <strong>memory controller</strong> hardware (not software, not the OS) is what actually moves data from RAM into cache, completely automatically. As new data is loaded, the least-recently-used data already in cache gets evicted back down a level to make room — this happens transparently in hardware, which is why even a bare-metal MCU with no operating system at all still benefits from caching if it has one.</p>
     <div class="callout"><div class="callout-label">Why this matters for firmware</div>Code and data layout that respects this hierarchy — keeping a hot loop's working set small enough to fit in cache, accessing arrays sequentially rather than scattered randomly — can be the difference between a control loop that meets its deadline and one that doesn't, even with identical instruction counts. "How many cycles does this actually cost once memory access is accounted for" is a different, often more important question than "how many instructions does this take."</div>
-  `},
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Use the memory-hierarchy simulator above to compare a "hot loop" that fits entirely in L1 cache against one whose working set spills into RAM. Roughly how many times slower is a 300-cycle RAM access than a 2-cycle L1 hit, and why does that mean looping over a small array sequentially can be dramatically faster than looping over a large one doing the exact same arithmetic per element?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Roughly 150x slower (300 ÷ 2). The arithmetic itself — one add, one multiply — costs the same regardless of array size, but if the array is small enough that it (and whatever it's compared against) stays resident in L1 across the whole loop, nearly every access is a 1–4 cycle cache hit; once the working set is too large to fit, the CPU starts paying RAM-latency cache misses on a meaningful fraction of accesses, and those misses — not the arithmetic — dominate total runtime. This is also why sequential access patterns beat scattered ones at the same total size: hardware prefetching and whole-cache-line loads mean sequential access gets far more "free" cache hits per RAM trip than jumping around does.</div>
+      </details>
+    </div>
+  `, widget:'memHierarchySim' },
   { id:'m-2', title:'RAM Types & Non-Volatile Memory, Compared', body:`
     <p>"RAM" and "flash" aren't single technologies — different physical implementations trade off speed, cost, density, and power very differently, and picking the right one (or knowing which one a given chip already gives you) matters.</p>
     <h4>DRAM vs. SRAM</h4>
@@ -1162,6 +1391,12 @@ counter++;   <span class="cm">// guaranteed atomic &mdash; no lock needed, no tw
     <h4>Flash: a type of EEPROM, split into two families</h4>
     <p><strong>NOR flash</strong> supports <strong>execute-in-place (XIP)</strong> — the CPU can run code directly out of it without first copying to RAM, which is exactly why MCU program flash (Unit 2's discussion of where your compiled firmware lives) is NOR flash. <strong>NAND flash</strong> trades that direct-execute capability for much higher density and lower cost per byte, which is why it's used in SSDs, USB drives, and SD cards — bulk storage that gets read into RAM before being executed or processed, never run from directly.</p>
     <div class="callout violet"><div class="callout-label">Connecting back to Unit 8</div>The erase-before-write behavior, limited write endurance, and wear-leveling requirement covered in Lesson 8.1 for "flash" generally are specifically NOR-flash behaviors at the physical level — now you have the underlying reason: both NOR and NAND share the same floating-gate cell technology and its same write-endurance physics, just optimized for different access patterns.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A new MCU's datasheet says its program memory is NAND flash rather than the usual NOR flash. Without looking anything else up, what's the one practical consequence you'd expect this to have on how the chip boots and runs code, based purely on the NOR vs. NAND distinction above?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">NAND flash doesn't support execute-in-place, so the CPU can't run code directly out of it the way it would from NOR. That means this chip can't simply jump straight into its program memory on reset the way a typical NOR-based MCU does — something (a small boot ROM, or dedicated hardware) has to first copy the application image out of NAND into RAM, and the CPU then executes from RAM instead. This is genuinely unusual for a small MCU and is far more characteristic of how an embedded Linux system or SoC boots, which is the kind of architectural clue worth noticing rather than memorizing in isolation.</div>
+      </details>
+    </div>
   `},
   { id:'m-3', title:'Cache Mapping & Multi-Core Cache Coherence', body:`
     <p>When the CPU wants to cache a piece of data from a specific RAM address, it needs a rule for <em>where in cache that data is allowed to go</em> — and that rule is a real engineering tradeoff between speed, hit rate, and hardware cost.</p>
@@ -1184,7 +1419,14 @@ counter++;   <span class="cm">// guaranteed atomic &mdash; no lock needed, no tw
     <p>This is entirely a hardware-managed protocol — software never directly manipulates these states — but it's worth knowing as the mechanism that makes Unit 6's shared-memory concurrency hazards even possible to reason about correctly across multiple physical cores, not just multiple threads time-sliced on one core.</p>
     <h4>Bus contention</h4>
     <p>When multiple components — cores, DMA controllers, peripherals — all need the shared memory bus at once, only one transfer can actually happen at a time, and everyone else stalls. This is mitigated by caching (fewer trips to the bus needed at all), by separating high-speed and low-speed buses so slow peripherals don't block fast memory traffic, and by widening memory bandwidth where the budget allows it.</p>
-  `},
+    <p>Load addresses into the cache below and compare how direct-mapped and set-associative placement handle the exact same access pattern.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>Using the simulator above, find or construct two addresses that map to the <em>same</em> line in a direct-mapped cache but land in different ways under a 2-way set-associative cache of the same total size. Which one avoids a conflict miss when both addresses are accessed repeatedly in alternation, and why doesn't fully-associative mapping win outright over set-associative in real CPUs despite having the best possible hit rate?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">Direct-mapped: alternating between two addresses that hash to the same line forces a conflict-miss eviction on <em>every single access</em> — neither address ever stays cached. 2-way set-associative: both addresses can occupy the same set simultaneously (one in each of the set's two ways), so both stay cached and every access after the first is a hit — exactly the conflict-miss scenario set-associativity exists to fix. Fully-associative would also avoid this, but real CPUs don't use it for large caches because checking "could this address be in literally any line" requires comparing the incoming address against every single cache line's tag simultaneously, in hardware, every single access — that comparator hardware scales so badly with cache size that it's only practical for very small caches (like a TLB), not a full L1/L2.</div>
+      </details>
+    </div>
+  `, widget:'cacheMapSim'},
   { id:'m-4', title:'Virtual Memory, Page Tables & the TLB', body:`
     <p>On a system running an OS (not a bare-metal MCU — see Lesson m-5), a process never touches physical RAM addresses directly. Instead, the OS gives every process its own <strong>virtual address space</strong>, and dedicated hardware translates virtual addresses to real physical ones on every single memory access.</p>
     <h4>What virtual memory actually solves</h4>
@@ -1203,6 +1445,12 @@ physical address = [ PPN | offset ]   <span class="cm">// offset is unchanged �
     <h4>The TLB: caching the page table itself</h4>
     <p>A full page-table lookup is itself a slow RAM access, and doing one on every single memory reference would defeat much of the point of having fast caches at all. The <strong>Translation Lookaside Buffer (TLB)</strong> is a small, very fast cache inside the CPU core that stores recently-used VPN→PPN translations. A <strong>TLB hit</strong> skips the page-table walk entirely; a <strong>TLB miss</strong> falls back to the full page-table lookup in RAM and then populates the TLB with the result for next time. The OS tags entries by <strong>Process ID (PID)</strong> so two processes' virtual addresses — which can legitimately be identical numbers pointing at completely different physical memory — never get confused with each other.</p>
     <div class="callout warn"><div class="callout-label">Why real-time embedded systems usually skip all of this</div>Page faults are fundamentally unpredictable in timing — exactly the property a hard-real-time system can't tolerate (Lesson 6.1). Most embedded RTOS designs run a single process with one flat physical address space, no virtual memory, no MMU translation, and no swap — trading away the protection and flexibility benefits above in direct exchange for deterministic, guaranteed-bounded memory access timing.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A process accesses a virtual address. Walk through, in order, what happens on a TLB hit versus a TLB miss that also turns out to be a page fault (the page was swapped to disk). Which of these two paths has wildly unpredictable timing, and why is that specifically disqualifying for a hard-real-time system even if it only happens rarely?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer"><strong>TLB hit:</strong> the VPN→PPN translation is found instantly in the on-core TLB, the physical address is handed to cache/memory, and the access proceeds at normal cached-memory speed. <strong>TLB miss + page fault:</strong> the TLB lookup fails, the CPU walks the page table in RAM (already much slower), discovers the page isn't resident at all, raises a page fault, pauses the process, and waits for the OS to read the page back from <strong>disk</strong> — a delay that can be many thousands of times slower than a cache hit, and depends on the speed and current load of whatever storage device is involved. A hard-real-time system can't tolerate this because its whole guarantee is a bounded worst-case time for every operation; an occasional page fault that's 10,000x slower than the typical case has no fixed upper bound it can promise, which is disqualifying even if such faults are statistically rare — "almost always fast" isn't "guaranteed bounded."</div>
+      </details>
+    </div>
   `},
   { id:'m-5', title:'Kernel vs. User Space, and How an OS Schedules Work', body:`
     <p>Everything in this lesson assumes a system running a full OS (embedded Linux, a desktop) rather than RTOS/bare-metal firmware — useful context for embedded Linux roles, and for understanding exactly what an RTOS or bare-metal target deliberately does <em>not</em> have.</p>
@@ -1222,6 +1470,12 @@ physical address = [ PPN | offset ]   <span class="cm">// offset is unchanged �
     <p>Linux's default scheduler, <strong>CFS</strong> (Completely Fair Scheduler), tracks each process's accumulated <strong>virtual runtime</strong> and always runs whichever process has used the least CPU time so far — fair, throughput-oriented, but with no real-time guarantees about when any specific task runs. An RTOS instead uses scheduling policies chosen specifically for predictability: <strong>rate-monotonic</strong> (shorter-period tasks get higher fixed priority — Lesson 6.2), <strong>earliest-deadline-first</strong> (whichever task's deadline is soonest runs next), or simple <strong>round-robin</strong> among equal-priority tasks. The difference in philosophy is the whole point: CFS optimizes for average fairness across many unrelated programs, while an RTOS scheduler optimizes for bounded, provable worst-case latency on a known, fixed set of tasks — fairness is explicitly not the goal.</p>
     <h4>The slab allocator: avoiding heap fragmentation at the kernel level</h4>
     <p>Even within one process's virtual address space, repeated <code>malloc</code>/<code>free</code> cycles can fragment the heap (Lesson 1.4). The kernel's own internal allocator typically avoids this with a <strong>slab allocator</strong>: pre-allocate fixed-size memory pools (a <em>cache</em>) per object type, carve each cache into <em>slabs</em> (contiguous chunks), and serve individual fixed-size <em>objects</em> out of those slabs. Because every object of a given type is the same size, there's no general-purpose hunting for "a free block big enough" the way a generic heap allocator must do — allocation is fast, and fragmentation is largely confined to within a slab rather than across the whole heap. This is conceptually the OS-level cousin of the fixed-size memory-pool advice Lesson 1.4 already gave for real-time embedded code: in both cases, the fix for fragmentation is refusing to let allocation sizes be arbitrary in the first place.</p>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>One thread in a multithreaded Linux process corrupts a piece of memory through a bad pointer write. Based on the process-vs-thread table above, what's the worst-case blast radius of that bug — does it stay contained to that one thread, or can it affect the whole process? Now compare: what would the blast radius be if it were instead one process (not thread) corrupting its own memory the same way?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">A thread corrupting memory through a bad pointer can crash the <strong>entire process</strong> — every thread in a process shares the same heap and static memory, so there's no isolation between threads to contain the damage; one thread's stray write can corrupt data another thread depends on. A single process corrupting its own memory, by contrast, stays contained to <strong>that process alone</strong> — other processes have their own fully isolated virtual address spaces (Lesson m-4) and can't see or be affected by it. This is exactly the tradeoff the table's "fault isolation" row is pointing at: threads are cheap and fast to communicate between specifically because they give up the isolation that processes provide by default.</div>
+      </details>
+    </div>
   `},
 ] },
 
@@ -1425,7 +1679,10 @@ Command commands[] = {
       <li><strong>Multi-sensor alarm system:</strong> two or three different sensors feeding into one FSM that decides ARMED vs. TRIGGERED, reporting state changes over UART or driving an output, with debounced physical arm/disarm buttons from Project 1.</li>
     </ul>
     <div class="exblock"><div class="ex-label">Before you call it done</div>
-      <p>Out loud, to yourself or someone else: walk through what happens from power-on to steady-state operation, in order. If there's a step you can't explain precisely — "and then somehow the sensor data gets to the display task" — that's not a finished system yet, that's a system with a gap in it. This is exactly the standard Lesson 10.4 says a real interviewer will hold your project to.</p>
+      <p>Out loud, to yourself or someone else: walk through what happens from power-on to steady-state operation, in order, for your own capstone design. Type a quick summary of that walkthrough below — if there's a step you can't explain precisely ("and then somehow the sensor data gets to the display task"), that's the gap to go fix before you call this done.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal the standard this is checked against</span></summary>
+        <div class="answer">There's no single correct walkthrough since every capstone design differs, but a complete one names: what runs first on power-on (clock/peripheral init, Lesson 2.5) and in what order; which task or ISR triggers each sense step and how often; exactly how data crosses from an ISR or task to wherever it's consumed (a queue, a flagged <code>volatile</code>, Lesson 6.3) with no unexplained "somehow"; what your FSM's states and transitions are and what triggers each one; and what your one defensive mechanism actually catches and what it does in response. This is exactly the standard Lesson 10.4 says a real interviewer will hold your project to — if any of those five can't be stated precisely, that's the gap to close first.</div>
+      </details>
     </div>
   `},
 ] },
@@ -1440,6 +1697,12 @@ Command commands[] = {
       <li><strong>Behavioral round.</strong> STAR-format questions about past projects — this is where specific, technically detailed project stories (not generic teamwork anecdotes) differentiate strong candidates, especially stories that include what went wrong and how you diagnosed it, not just what went right.</li>
     </ol>
     <div class="callout"><div class="callout-label">What's actually being evaluated underneath all of it</div>Across every stage, interviewers are really testing for the same thing in different costumes: can you reason precisely about what hardware and software are actually doing at the bit and timing level, rather than working from a fuzzy mental model — and can you communicate that reasoning clearly when something breaks. Every unit in this course was built to make exactly that kind of precise reasoning available to you on demand.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself</div>
+      <p>A candidate gives a technically perfect answer to "explain volatile" but delivers it as a rapid, jargon-dense monologue with no pauses, eye contact, or check-ins. Based on what this lesson says the technical phone screen is actually calibrated for, is that a strong answer or a weak one — and what would you change?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal answer</span></summary>
+        <div class="answer">It's a weaker answer than it looks on paper. The lesson is explicit that the phone screen tests <strong>breadth and clear communication</strong>, not an exhaustive dissertation — the goal is "explain this clearly to someone checking I actually understand it." A correct-but-impenetrable monologue fails that bar even though every fact in it is right, because it doesn't demonstrate the ability to communicate reasoning clearly, which is exactly what the lesson says is being evaluated underneath the technical content at every stage. The fix isn't more technical depth — it's pacing, a concrete example up front, and pausing to check the listener is following.</div>
+      </details>
+    </div>
   `},
   { id:'10-2', title:'Core Technical Question Bank', body:`
     <p>Work through these the way you'd actually be asked them — try to answer before expanding each one. They map directly onto Units 1–9.</p>
@@ -1483,6 +1746,12 @@ Command commands[] = {
     <h4>Practice scenario: "The device runs fine for hours, then stops responding. How do you debug it?"</h4>
     <p>A structured approach beats guessing: <strong>(1)</strong> is the chip actually still running, or has it hard-faulted/hung? — check if a debugger can even attach, check if a watchdog reset is logged (Lessons 2.5, 8.1); <strong>(2)</strong> if it's still executing but unresponsive, suspect a deadlock (two tasks each waiting on a resource the other holds) or a stuck blocking call inside an ISR or high-priority task (Lessons 3.4, 6.4); <strong>(3)</strong> "after hours" specifically points toward something that accumulates — a slow memory leak (rare in static-allocation firmware, but possible with a queue that's never fully drained), heap fragmentation if dynamic allocation is in play, or a counter overflowing and wrapping into a code path that was never tested (Lessons 1.5, 7.1); <strong>(4)</strong> what instrumentation would catch this faster next time — a hard fault handler logging state to non-volatile memory before reset, or a periodic "still alive" heartbeat over UART/CAN that stops appearing right before the failure, narrowing the time window (Lesson 8.1).</p>
     <div class="callout"><div class="callout-label">The meta-skill being tested</div>Interviewers care more about the order and rigor of your hypotheses than about landing on the exact right answer immediately — "what happens if this assumption is wrong" (Lesson 1.1's closing idea, and a known instinct of yours already) is the single most reusable habit in this whole unit.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself — a third scenario, unworked</div>
+      <p>"A battery-powered sensor node needs to last a full year on one coin cell, waking up once per minute to take a reading and occasionally transmitting over BLE. Design the firmware." Narrate a structured answer the way the two worked examples above do — what's the very first design lever you'd reach for, and what would you check second?</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal one strong answer</span></summary>
+        <div class="answer">A strong answer starts with <strong>power as the dominant constraint</strong>, not the sensor logic: the system should spend nearly all its life in the deepest low-power mode that can still wake on a timer (Lesson 2.5's Stop/Standby distinction), waking only briefly each minute to sample, then returning to sleep immediately — average current draw, not peak, is what determines a year of coin-cell life. Second, check what the BLE radio actually costs: radio transmission is typically the single largest power draw in a system like this by a wide margin, so the design should batch readings and transmit only occasionally (not every wake cycle) and use the radio's own lowest-power connection/advertising interval settings rather than keeping it active continuously. From there the same checklist as the worked examples applies: how is the sampled value handed safely between the wake ISR and the main logic, what happens if a reading is implausible, and what's the fallback if the battery is nearly dead and a transmission can't complete.</div>
+      </details>
+    </div>
   `},
   { id:'10-4', title:'Building a Portfolio That Proves You Can Do the Job', body:`
     <p>A resume bullet claiming familiarity with interrupts or RTOSes is far weaker than a project that visibly required understanding them — and every concept in this course maps to a project that can demonstrate it concretely.</p>
@@ -1493,6 +1762,12 @@ Command commands[] = {
       <li><strong>Every claim should survive a follow-up question.</strong> If a bullet says "reduced integration errors by 50%," be ready to explain exactly what was measured and how — the same defensibility standard you've already been holding your resume work to elsewhere is exactly what a technical interviewer will probe on the spot.</li>
     </ul>
     <div class="callout violet"><div class="callout-label">Closing note</div>You now have, in one place, the same foundation-to-systems arc that the five resources you originally gathered would have taught across dozens of scattered hours — binary and registers, peripherals and protocols, concurrency and safety, and the language to talk about all of it precisely in an interview. The fastest way to make any of it permanent from here is still the same advice as before: build something, let it break, and find out why.</div>
+    <div class="exblock"><div class="ex-label">Try it yourself — stress-test one resume bullet</div>
+      <p>Write one real or hypothetical resume bullet for a project you've built or plan to build. Then, against the four checklist items above, identify which ones it currently fails and what you'd add to fix each gap.</p>
+      <details class="qcard exercise"><summary><span class="qnum">Reveal a rubric to check against</span></summary>
+        <div class="answer">There's no single correct answer here, but a bullet that survives scrutiny usually does all of the following: names <strong>at least two specific peripherals/protocols</strong> rather than "various sensors"; mentions <strong>one specific thing that broke and how it was found</strong>, not just the happy-path outcome; is backed by a <strong>repo with a real README and incremental commit history</strong> a reviewer could actually open; and contains <strong>no unquantified or unverifiable claim</strong> you couldn't immediately back up with a number and a method if asked "how did you measure that?" If your bullet says something like "improved reliability" or "optimized performance" with no number and no specific failure mode behind it, that's the most common gap — and the most common thing a sharp interviewer will probe first.</div>
+      </details>
+    </div>
   `},
 ] },
 ];
@@ -1565,6 +1840,131 @@ function findLesson(id){
   for(const u of UNITS){ for(const l of u.lessons){ if(l.id===id) return {unit:u, lesson:l}; } }
   return null;
 }
+
+/* =========================================================
+   ACTIVE RECALL — turn every qcard (exercise + interview Q&A)
+   into "try it first, then reveal" with lightweight self-check feedback
+========================================================= */
+const STOP_TERMS = new Set(['the','a','an','and','or','but','if','of','to','in','on','for','with','is','are','was','were','it','this','that','as','at','by','be','from','its','your','you','not','no','so','can','will','would']);
+
+function extractKeyTerms(answerEl){
+  const raw = [];
+  answerEl.querySelectorAll('strong, code').forEach(el => raw.push(el.textContent.trim()));
+  // dedupe, drop empties/too-short/pure punctuation, drop terms that are substrings of a longer term already kept
+  const cleaned = [...new Set(raw)]
+    .map(t => t.replace(/[.,;:()]+$/,'').trim())
+    .filter(t => t.length >= 2 && !/^[\W_]+$/.test(t))
+    .filter(t => !(t.length <= 3 && STOP_TERMS.has(t.toLowerCase())));
+  cleaned.sort((a,b) => b.length - a.length);
+  const kept = [];
+  for (const t of cleaned){
+    if (kept.some(k => k.toLowerCase().includes(t.toLowerCase()))) continue;
+    kept.push(t);
+  }
+  return kept.slice(0, 9);
+}
+
+function scoreAttempt(userText, terms){
+  const hay = userText.toLowerCase();
+  const hit = [], miss = [];
+  for (const t of terms){
+    const needle = t.toLowerCase().replace(/[^a-z0-9_<>|&^~=! ]/g, m => m); // keep code symbols as-is
+    if (needle.length >= 2 && hay.includes(needle)) hit.push(t); else miss.push(t);
+  }
+  return { hit, miss, ratio: terms.length ? hit.length / terms.length : 0 };
+}
+
+function renderTermChips(hit, miss){
+  if (hit.length===0 && miss.length===0) return '';
+  const chips = [
+    ...hit.map(t => `<span class="term-chip hit">✓ ${escapeHtml(t)}</span>`),
+    ...miss.map(t => `<span class="term-chip miss">${escapeHtml(t)}</span>`)
+  ].join('');
+  return `<div class="term-chips">${chips}</div>`;
+}
+
+function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function buildFeedback(userText, answerEl){
+  const terms = extractKeyTerms(answerEl);
+  if (!userText.trim()){
+    return { tier:'weak', html:`<div class="fb-head">No attempt logged</div>Typing even a rough guess before looking — and being wrong — builds a stronger memory trace than reading the answer cold. Try the next one before revealing.` };
+  }
+  const { hit, miss, ratio } = scoreAttempt(userText, terms);
+  let tier, head;
+  if (terms.length === 0){
+    tier='mid'; head='Attempt logged';
+    return { tier, html:`<div class="fb-head">${head}</div>Compare your reasoning against the solution below — this one doesn't reduce cleanly to keywords, so judge it by hand.` };
+  }
+  if (ratio >= 0.7){ tier='strong'; head='Strong — you hit the key ideas'; }
+  else if (ratio >= 0.35){ tier='mid'; head="Partway there"; }
+  else { tier='weak'; head='Worth a closer look'; }
+  const missNote = miss.length ? `You didn't mention: ${miss.slice(0,4).map(escapeHtml).join(', ')}.` : 'You covered everything this check looks for.';
+  return { tier, html:`<div class="fb-head">${head}</div>${missNote} Read the full solution below for the reasoning, not just the terms.${renderTermChips(hit, miss)}` };
+}
+
+function enhanceActiveLearning(scope){
+  scope.querySelectorAll('.qcard').forEach(qcard => {
+    if (qcard.dataset.benchWired) return;
+    qcard.dataset.benchWired = '1';
+    const summary = qcard.querySelector(':scope > summary');
+    const answerEl = qcard.querySelector(':scope > .answer');
+    if (!summary || !answerEl) return;
+
+    const exblock = qcard.closest('.exblock');
+    let questionHTML = '';
+    if (exblock){
+      // question already shown in the exblock's own <p> just above — don't repeat it
+      questionHTML = '';
+    } else {
+      const clone = summary.cloneNode(true);
+      const qnum = clone.querySelector('.qnum');
+      let label = '';
+      if (qnum){ label = qnum.outerHTML; qnum.remove(); }
+      questionHTML = clone.innerHTML.trim();
+      // keep just the qnum visible on the collapsed summary itself, question moves into the practice box
+      summary.innerHTML = label + ' <span class="mono" style="color:var(--text-mute);font-size:11.5px;">(answer above, then reveal)</span>';
+    }
+
+    const box = document.createElement('div');
+    box.className = 'practice-box';
+    box.innerHTML = `
+      <div class="practice-label">✏️ Active recall — answer before you peek</div>
+      ${questionHTML ? `<div class="practice-q">${questionHTML}</div>` : ''}
+      <textarea class="practice-textarea" placeholder="Type your attempt here — even a rough sketch counts..."></textarea>
+      <div class="practice-actions">
+        <button class="practice-btn practice-check">Check my answer</button>
+        <button class="practice-skip">skip — just show me</button>
+      </div>
+      <div class="practice-feedback" style="display:none;"></div>
+    `;
+    qcard.parentNode.insertBefore(box, qcard);
+
+    let locked = true;
+    qcard.addEventListener('click', e => { if (locked) e.preventDefault(); });
+
+    const ta = box.querySelector('.practice-textarea');
+    const fb = box.querySelector('.practice-feedback');
+    const checkBtn = box.querySelector('.practice-check');
+    const skipBtn = box.querySelector('.practice-skip');
+
+    function reveal(){
+      locked = false;
+      qcard.open = true;
+      qcard.scrollIntoView({ block:'nearest', behavior:'smooth' });
+    }
+    checkBtn.addEventListener('click', () => {
+      const result = buildFeedback(ta.value, answerEl);
+      fb.className = `practice-feedback tier-${result.tier}`;
+      fb.innerHTML = result.html;
+      fb.style.display = '';
+      ta.disabled = true; checkBtn.disabled = true;
+      reveal();
+    });
+    skipBtn.addEventListener('click', () => { reveal(); });
+  });
+}
+
 function renderContent(){
   const { unit, lesson } = findLesson(currentLessonId);
   const all = flatLessons();
@@ -1591,6 +1991,7 @@ function renderContent(){
   if(next) document.getElementById('next-btn').addEventListener('click', () => { currentLessonId = next.lesson.id; renderAll(); window.scrollTo({top:0,behavior:'smooth'}); });
   if(lesson.widget && WIDGETS[lesson.widget]) WIDGETS[lesson.widget](document.getElementById('widget-mount'));
   if(unit.quiz && lesson.id === unit.lessons[unit.lessons.length-1].id) mountQuiz(unit);
+  enhanceActiveLearning(wrap);
 }
 function renderAll(){ renderSidebar(); renderContent(); }
 
@@ -1598,47 +1999,95 @@ function renderAll(){ renderSidebar(); renderContent(); }
    QUIZZES
 ========================================================= */
 const QUIZZES = {
+  u0: [
+    { q:'Inside lessons, an amber "try it yourself" box is best used by:', opts:['Revealing the solution first, then reading the problem','Attempting the exercise before revealing the hidden solution','Skipping it entirely','Only doing it after finishing the whole course'], a:1 },
+    { q:'What does a unit quiz at the end of a unit provide?', opts:['A final grade sent to an instructor','Instant, self-graded multiple-choice and fill-in feedback','A certificate of completion','Nothing \u2014 it is purely decorative'], a:1 },
+    { type:'fill', q:'Unit 11\u2019s interview prep section is meant to be tackled once which units are solid? (answer like "1-10")', a:'1-10', accept:['units 1-10','1 through 10','units 1 to 10','1 to 10'] },
+  ],
   u1: [
     { q:'A control register holds 0x2A. What is bit 3 (counting from 0)?', opts:['1','0','Cannot tell','2'], a:0 },
     { q:'You need to set bit 5 of REG to 1 without disturbing any other bit. Which line does that?', opts:['REG = (1 << 5);','REG |= (1 << 5);','REG &= (1 << 5);','REG ^= REG;'], a:1 },
     { q:'In two\u2019s complement, how do you negate a number?', opts:['Flip the sign bit only','Flip every bit, then add 1','Subtract it from 256','Shift it right by 1'], a:1 },
+    { q:'Which logic gate outputs 1 only when both of its inputs are 1?', opts:['AND','OR','XOR','NOR'], a:0 },
+    { q:'A function-pointer-based state machine typically dispatches the current state\u2019s behavior using:', opts:['An array of function pointers indexed by state','A series of nested if statements only','Direct stack manipulation','The linker script'], a:0 },
+    { type:'fill', q:'The keyword that tells the compiler a variable may change outside normal program flow (e.g. via hardware or an ISR), so it must not be cached in a register, is ____', a:'volatile' },
+    { type:'fill', q:'The C operator that returns the size in bytes of a type or variable at compile time is ____', a:'sizeof' },
   ],
   u2: [
     { q:'What does "memory-mapped I/O" mean?', opts:['Peripherals are controlled with special non-memory instructions','Peripheral registers are accessed using ordinary memory reads/writes at fixed addresses','Memory is mapped onto an external display','All RAM is shared between peripherals'], a:1 },
     { q:'What is the watchdog timer\u2019s purpose?', opts:['To measure elapsed program time','To force a reset if firmware fails to refresh it periodically, recovering from a hang','To slow the CPU clock to save power','To detect over-voltage on the supply rail'], a:1 },
+    { q:'DMA (Direct Memory Access) primarily exists to:', opts:['Move data between memory and peripherals without the CPU touching every byte','Increase the CPU clock speed','Replace the need for interrupts entirely','Add more GPIO pins'], a:0 },
+    { q:'A GPIO pin configured as open-drain output can:', opts:['Only ever drive high','Drive low, or float and be pulled high externally \u2014 but never actively drive high itself','Read analog voltage directly','Generate its own clock signal'], a:1 },
+    { type:'fill', q:'The toolchain step that combines compiled object files and assigns final memory addresses is the ____', a:'linker' },
   ],
   u3: [
     { q:'Why should an ISR be kept short?', opts:['Long ISRs use more flash memory','A long ISR blocks lower-priority interrupts and delays the main loop','Short ISRs compile faster','It is a stylistic preference only'], a:1 },
     { q:'What does a critical section (disabling interrupts) protect against?', opts:['Compiler optimization bugs','A multi-step operation on shared data being interrupted partway through','Stack overflow','Flash wear'], a:1 },
+    { q:'On the Cortex-M NVIC, a lower numeric priority value generally means:', opts:['Lower priority \u2014 it runs last','Higher priority \u2014 it can preempt handlers with a higher numeric value','No priority at all','Priority numbers are ignored on Cortex-M'], a:1 },
+    { q:'A mechanical button\u2019s contacts bouncing for a few ms after a press is best handled with:', opts:['A faster CPU clock','A debounce state machine, often timed with a short timer-based settle window','Permanently disabling interrupts','Increasing the pull-up resistor value only'], a:1 },
+    { type:'fill', q:'A variable shared between an ISR and the main loop must be declared ____ so the compiler doesn\u2019t cache a stale copy in a register', a:'volatile' },
   ],
   u4: [
     { q:'In CAN bus arbitration, which message wins when two nodes transmit simultaneously?', opts:['The one that started transmitting first in wall-clock time','The one with the numerically lower ID (more dominant bits)','A random one, chosen by the bus','The one with more data bytes'], a:1 },
     { q:'What does I\u00b2C have that SPI does not?', opts:['Higher maximum speed','Built-in device addressing on a shared bus','A dedicated clock wire','More than 2 wires required'], a:1 },
+    { q:'A single-slave SPI connection typically uses how many dedicated signal lines (MOSI, MISO, SCLK, CS)?', opts:['2','3','4','6'], a:2 },
+    { q:'Because UART has no shared clock line, both devices must agree in advance on:', opts:['The baud rate (bit timing)','The IP address','A bus arbitration ID','Interrupt priority'], a:0 },
+    { type:'fill', q:'I\u00b2C requires pull-up resistors on SDA/SCL because its outputs are ____-drain', a:'open', accept:['open drain','open-drain'] },
   ],
   u5: [
     { q:'Sampling below the Nyquist rate causes which effect?', opts:['Quantization error only','Aliasing — a high frequency masquerades as a false lower frequency','The ADC simply stops working','Increased resolution'], a:1 },
     { q:'What does an anti-aliasing filter do?', opts:['Increases ADC resolution','Attenuates frequencies above the Nyquist limit before sampling','Amplifies the signal','Converts analog to digital directly'], a:1 },
+    { q:'PWM (Pulse Width Modulation) controls average delivered power mainly by varying:', opts:['Frequency only','The duty cycle \u2014 the on-time fraction of each period','The supply voltage directly','The ADC\u2019s resolution'], a:1 },
+    { q:'In a PID controller, the integral term primarily addresses:', opts:['Instantaneous error spikes','Steady-state error that accumulates over time','Predicted future error','Sensor noise filtering'], a:1 },
+    { type:'fill', q:'An ADC\u2019s ____ determines how many discrete digital levels a sampled voltage can be represented with (e.g. 12-bit = 4096 levels)', a:'resolution' },
   ],
   u6: [
     { q:'Priority inversion happens when:', opts:['A high-priority task is indirectly blocked by a lower-priority task holding a needed mutex, while a medium-priority task keeps running','Two tasks have the same priority','A task voluntarily lowers its own priority','An ISR runs too quickly'], a:0 },
     { q:'What is the key difference between a mutex and a binary semaphore?', opts:['Mutexes are faster','A mutex has ownership and supports priority inheritance; a semaphore is a signaling mechanism with no ownership','A semaphore can only be used in an ISR','There is no real difference'], a:1 },
+    { q:'A hard real-time deadline means:', opts:['Missing it is merely undesirable','Missing it constitutes a system failure','It only applies to soft real-time systems','Deadlines are purely advisory'], a:1 },
+    { q:'An ISR-safe RTOS API (e.g. xQueueSendFromISR) differs from its task-context counterpart because it:', opts:['Always runs faster','Avoids operations unsafe inside interrupt context, such as blocking', 'Uses a different language','Bypasses the scheduler permanently'], a:1 },
+    { type:'fill', q:'A race condition occurs when correctness depends on the unpredictable ____ of two or more tasks accessing shared data', a:'timing', accept:['ordering','interleaving','scheduling'] },
   ],
   u7: [
     { q:'Why can\u2019t flash be updated one byte at a time the way RAM can?', opts:['Flash has no read capability','Bits can only be erased back to 1 at the granularity of a whole block, not a single byte','Flash is always read-only after manufacturing','It requires a different voltage for every byte'], a:1 },
     { q:'What problem does a dual-bank (A/B) firmware update scheme solve?', opts:['It doubles available flash for the application','It prevents a failed/interrupted update from leaving the device unbootable, since the previous working image is untouched','It encrypts the firmware automatically','It eliminates the need for a bootloader'], a:1 },
+    { q:'EEPROM is often preferred over flash for small, frequently-changing data (like a counter) because:', opts:['It generally tolerates far more write cycles and allows byte-level writes without a block erase','EEPROM is volatile','Flash is faster than EEPROM','EEPROM cannot be erased at all'], a:0 },
+    { type:'fill', q:'The bootloader mode that lets firmware be updated over a wireless link is commonly abbreviated ____', a:'OTA', accept:['over the air','over-the-air'] },
+    { type:'fill', q:'Repeated erase/write cycles gradually degrade flash cells \u2014 this phenomenon is called flash ____', a:'wear', accept:['wear-out','wear out','wearout'] },
   ],
   u8: [
     { q:'What does a brown-out detector protect against?', opts:['Overheating','Unpredictable or corrupting behavior caused by supply voltage dropping below a safe operating level','Firmware running too fast','Flash wear-out'], a:1 },
     { q:'Why use Hardware-in-the-Loop (HIL) testing in addition to unit tests?', opts:['HIL replaces the need for unit tests entirely','HIL verifies real firmware on real hardware with injected real-world conditions, which mocked unit tests cannot do','HIL is only used for marketing demos','Unit tests cannot run in CI'], a:1 },
+    { q:'A "hard fault" on an ARM Cortex-M typically indicates:', opts:['Normal program termination','A serious error \u2014 like an invalid memory access or illegal instruction \u2014 the CPU can\u2019t otherwise handle','A successful watchdog reset','A compiler warning'], a:1 },
+    { q:'ASIL (Automotive Safety Integrity Level) ratings exist primarily to:', opts:['Rate fuel efficiency','Classify how much process rigor and redundancy a function needs based on risk of harm','Measure clock speed','Replace unit testing'], a:1 },
+    { type:'fill', q:'A lightweight runtime check like assert(ptr != NULL) that halts execution when an assumption is violated is commonly called an ____', a:'assert', accept:['assertion'] },
   ],
   u9: [
     { q:'What is the main purpose of secure boot?', opts:['To make the device boot faster','To cryptographically verify firmware authenticity before running it, blocking unauthorized images','To compress the firmware image','To enable remote debugging'], a:1 },
     { q:'Why are debug ports (SWD/JTAG) a security concern in shipped products?', opts:['They consume extra power','Left enabled, they can let someone with physical access dump flash contents or reprogram the device','They slow down the CPU','They are required to be open by law'], a:1 },
+    { q:'Why is reproducible, version-controlled build tooling especially important in embedded work?', opts:['It rarely matters since firmware changes infrequently','Field firmware must be exactly reproducible for debugging and recertification, sometimes years later','It only matters for desktop apps','Compilers always produce identical output regardless of settings'], a:1 },
+    { type:'fill', q:'A cryptographic verification step performed before running firmware, ensuring only authorized images execute, is called ____ boot', a:'secure' },
+  ],
+  umem: [
+    { q:'Why is faster memory (e.g. L1 cache) always smaller than slower memory (e.g. main RAM)?', opts:['Faster memory technology is physically larger and far more expensive per bit, so only a small amount sits close to the CPU','Manufacturers intentionally cripple speed','Slower memory is always cheaper to make in large sizes','There is no real relationship between speed and size'], a:0 },
+    { q:'A TLB (Translation Lookaside Buffer) exists to:', opts:['Store recently used virtual-to-physical address translations so most accesses skip a full page table walk','Translate machine code into assembly','Cache disk file contents','Manage interrupt priorities'], a:0 },
+    { q:'Kernel space vs. user space separation primarily exists to:', opts:['Make programs run faster','Prevent user applications from directly touching hardware or other processes\u2019 memory, isolating faults','Reduce instruction count','Simplify compiler design'], a:1 },
+    { type:'fill', q:'In a 2-way set-associative cache, a memory block can map to ____ possible locations (cache lines) within its set', a:'2', accept:['two'] },
+    { type:'fill', q:'On a multi-core system, keeping every core\u2019s cached copy of shared data consistent is the job of the cache ____ protocol', a:'coherence', accept:['coherency'] },
   ],
   uproj: [
     { q:'In a bootloader jumping to an application, why must you set the stack pointer from the application\u2019s vector table before jumping to its reset handler?', opts:['It is optional, only a performance optimization','The application\u2019s startup code immediately uses the stack, and a leftover bootloader stack pointer will corrupt memory the application doesn\u2019t expect to be touched yet','It changes the CPU\u2019s clock speed','It disables interrupts automatically'], a:1 },
     { q:'In an RTOS port of a sensor + button + report system, why connect tasks with a queue rather than a shared global variable?', opts:['Queues use less flash','A queue is a built-in, thread-safe handoff that avoids manually managing locking and races between tasks or an ISR and a task','Global variables are not allowed in C','Queues are required by the C standard'], a:1 },
     { q:'You add a watchdog and the board now resets every few seconds during normal operation. What\u2019s the most likely cause?', opts:['The LED is wired backwards','The watchdog timeout is shorter than the real worst-case loop time, or the kick happens on a code path that doesn\u2019t always run', 'The compiler optimized the watchdog away','The board needs a firmware update'], a:1 },
+    { q:'When retrofitting defensive firmware (brown-out detection, asserts, watchdog) onto an earlier project, the goal is mainly to:', opts:['Make the code shorter','Make failure modes detectable and recoverable instead of silent','Increase clock speed','Remove all interrupts'], a:1 },
+    { type:'fill', q:'A minimal UART bootloader\u2019s main job before jumping to the application is to receive a new firmware image and write it into ____', a:'flash', accept:['flash memory'] },
+  ],
+  u10: [
+    { q:'In a typical embedded interview loop, where is a "design the firmware for X sensor system" question most likely to appear?', opts:['The recruiter screen','The technical/onsite round','It never comes up in embedded interviews','Only in behavioral rounds'], a:1 },
+    { q:'What makes a project story stronger in a behavioral interview, per this course?', opts:['Describing only what went right','Including something that broke and how you diagnosed it','Avoiding technical detail to keep it concise','Focusing solely on teamwork anecdotes'], a:1 },
+    { q:'Why fuse at least two peripherals (e.g. an I\u00b2C sensor reported over UART/CAN) into one portfolio project?', opts:['It demonstrates a full sense \u2192 decide \u2192 actuate loop and gives a concrete project story','It\u2019s required by all interviewers','It reduces code size','It avoids needing a debugger'], a:0 },
+    { type:'fill', q:'Resume claims like "reduced integration errors by 50%" should be ____ \u2014 ready to explain exactly what was measured and how', a:'defensible', accept:['justifiable','explainable','backed up'] },
+    { type:'fill', q:'STAR-format behavioral answers stand for Situation, Task, Action, ____', a:'Result', accept:['results'] },
   ],
 };
 UNITS.forEach(u => { if(QUIZZES[u.id]) u.quiz = QUIZZES[u.id]; });
@@ -1656,16 +2105,39 @@ function mountQuiz(unit){
   body.className = 'widget-body';
   unit.quiz.forEach((q, qi) => {
     const qEl = document.createElement('div'); qEl.className = 'quiz-q';
-    const p = document.createElement('p'); p.className = 'qtext'; p.textContent = (qi+1) + '.  ' + q.q;
+    const p = document.createElement('p'); p.className = 'qtext';
+    p.innerHTML = (qi+1) + '.  ' + escapeHtml(q.q) + (q.type === 'fill' ? '<span class="quiz-tag">fill in the blank</span>' : '');
     qEl.appendChild(p);
-    q.opts.forEach((opt, oi) => {
-      const b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = opt;
-      b.addEventListener('click', () => {
-        const buttons = qEl.querySelectorAll('.quiz-opt');
-        buttons.forEach((bb, bi) => { bb.disabled = true; if(bi === q.a) bb.classList.add('correct'); else if(bi === oi) bb.classList.add('incorrect'); });
+
+    if (q.type === 'fill'){
+      const row = document.createElement('div'); row.className = 'quiz-fill';
+      const input = document.createElement('input'); input.type = 'text'; input.placeholder = q.placeholder || 'type your answer...';
+      const btn = document.createElement('button'); btn.className = 'quiz-fill-btn'; btn.textContent = 'Check';
+      row.appendChild(input); row.appendChild(btn);
+      qEl.appendChild(row);
+      const result = document.createElement('div'); result.className = 'quiz-fill-result';
+      qEl.appendChild(result);
+      const accept = (q.accept || []).concat([q.a]).map(s => String(s).toLowerCase().trim().replace(/\s+/g,' '));
+      function gradeFill(){
+        const userVal = input.value.toLowerCase().trim().replace(/\s+/g,' ');
+        const ok = userVal.length > 0 && accept.some(acc => userVal === acc || userVal.includes(acc) || acc.includes(userVal));
+        result.style.display = '';
+        result.className = 'quiz-fill-result ' + (ok ? 'correct' : 'incorrect');
+        result.innerHTML = (ok ? '✓ Correct. ' : '✗ Not quite. ') + 'Answer: <b>' + escapeHtml(String(q.a)) + '</b>' + (q.note ? ' — ' + escapeHtml(q.note) : '');
+        input.disabled = true; btn.disabled = true;
+      }
+      btn.addEventListener('click', gradeFill);
+      input.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); gradeFill(); } });
+    } else {
+      q.opts.forEach((opt, oi) => {
+        const b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = opt;
+        b.addEventListener('click', () => {
+          const buttons = qEl.querySelectorAll('.quiz-opt');
+          buttons.forEach((bb, bi) => { bb.disabled = true; if(bi === q.a) bb.classList.add('correct'); else if(bi === oi) bb.classList.add('incorrect'); });
+        });
+        qEl.appendChild(b);
       });
-      qEl.appendChild(b);
-    });
+    }
     body.appendChild(qEl);
   });
   mount.appendChild(body);
@@ -2045,9 +2517,788 @@ WIDGETS.watchdogSim = function(mount){
   });
 };
 
-/* =========================================================
-   INIT
-========================================================= */
+WIDGETS.structPaddingSim = function(mount){
+  const variants = {
+    unopt: { label:'char a; int b; char c; int d;', members:[{n:'a',s:1},{n:'b',s:4},{n:'c',s:1},{n:'d',s:4}] },
+    opt:   { label:'int b; int d; char a; char c;  (reordered, largest first)', members:[{n:'b',s:4},{n:'d',s:4},{n:'a',s:1},{n:'c',s:1}] },
+  };
+  const palette = {a:'#5eead4', b:'#ffb454', c:'#ff7ab6', d:'#a78bfa'};
+  let current = 'unopt';
+  mount.innerHTML = `<div class="widget-head"><span>Struct padding visualizer</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:14px;">
+        <button class="btn primary" id="sp-unopt">declaration order</button>
+        <button class="btn" id="sp-opt">reordered (optimal)</button>
+      </div>
+      <div class="readout" id="sp-decl" style="margin-bottom:10px;"></div>
+      <div class="bitgrid" id="sp-grid"></div>
+      <div class="readout" id="sp-size" style="margin-top:14px;"></div>
+    </div>`;
+  function layout(members){
+    let offset=0, maxAlign=1, bytes=[];
+    members.forEach(m=>{
+      maxAlign = Math.max(maxAlign, m.s);
+      while(offset % m.s !== 0){ bytes.push({pad:true}); offset++; }
+      for(let i=0;i<m.s;i++){ bytes.push({label:m.n, pad:false}); offset++; }
+    });
+    while(offset % maxAlign !== 0){ bytes.push({pad:true}); offset++; }
+    return bytes;
+  }
+  function render(){
+    const v = variants[current];
+    mount.querySelector('#sp-decl').textContent = v.label;
+    const bytes = layout(v.members);
+    const grid = mount.querySelector('#sp-grid');
+    grid.innerHTML = '';
+    bytes.forEach(b=>{
+      const el = document.createElement('div');
+      el.className = 'bit small';
+      if(b.pad){
+        el.style.cssText = 'background:repeating-linear-gradient(45deg,#1a2026,#1a2026 3px,#0d1115 3px,#0d1115 6px); color:#6d7782; border-color:#232a32;';
+        el.textContent = '·'; el.title = 'padding byte';
+      } else {
+        el.style.cssText = 'background:'+palette[b.label]+'22; border-color:'+palette[b.label]+'; color:'+palette[b.label]+';';
+        el.textContent = b.label; el.title = 'byte of member "'+b.label+'"';
+      }
+      grid.appendChild(el);
+    });
+    const padCount = bytes.filter(b=>b.pad).length;
+    mount.querySelector('#sp-size').innerHTML = 'sizeof(struct) = <b>'+bytes.length+'</b> bytes &nbsp;·&nbsp; padding = <b>'+padCount+'</b> bytes';
+  }
+  mount.querySelector('#sp-unopt').addEventListener('click', ()=>{ current='unopt'; setActive(); render(); });
+  mount.querySelector('#sp-opt').addEventListener('click', ()=>{ current='opt'; setActive(); render(); });
+  function setActive(){
+    mount.querySelector('#sp-unopt').classList.toggle('primary', current==='unopt');
+    mount.querySelector('#sp-opt').classList.toggle('primary', current==='opt');
+  }
+  render();
+};
+
+WIDGETS.interpolateSim = function(mount){
+  const datasets = {
+    linear: { x:[1,2,3,4,5], y:[2,4,6,8,10] },
+    curved: { x:[1,2,3,4,5], y:[2,3,7,8,11] },
+  };
+  let current = 'linear';
+  mount.innerHTML = `<div class="widget-head"><span>Interpolation: naive vs. piecewise</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:12px;">
+        <button class="btn primary" id="ip-linear">straight-line table</button>
+        <button class="btn" id="ip-curved">curved table</button>
+      </div>
+      <label class="readout">val = <b id="ip-val">3.0</b><input type="range" id="ip-slider" min="1" max="5" step="0.1" value="3" style="display:block; margin-top:6px;"></label>
+      <svg viewBox="0 0 600 220" style="width:100%; height:auto; margin-top:14px;" id="ip-svg"></svg>
+      <div class="row" style="margin-top:10px; gap:24px;">
+        <div class="readout">naive (whole-table endpoints): <b id="ip-naive" style="color:#ff6b6b;"></b></div>
+        <div class="readout">piecewise (bracketing pair): <b id="ip-piece" style="color:var(--cyan);"></b></div>
+      </div>
+    </div>`;
+  const W=600,H=220,padL=40,padR=20,padT=20,padB=30;
+  function sx(x,xs){ return padL + (x-xs[0])/(xs[xs.length-1]-xs[0]) * (W-padL-padR); }
+  function sy(y,ymin,ymax){ return H-padB - (y-ymin)/(ymax-ymin) * (H-padT-padB); }
+  function naiveInterp(val,xs,ys){
+    const XL=xs[0],XH=xs[xs.length-1],YL=ys[0],YH=ys[ys.length-1];
+    return ((val-XL)/(XH-XL))*(YH-YL)+YL;
+  }
+  function piecewiseInterp(val,xs,ys){
+    for(let i=0;i<xs.length-1;i++){
+      if(val>=xs[i] && val<=xs[i+1]){
+        const XL=xs[i],XH=xs[i+1],YL=ys[i],YH=ys[i+1];
+        return ((val-XL)/(XH-XL))*(YH-YL)+YL;
+      }
+    }
+    return ys[ys.length-1];
+  }
+  function render(){
+    const d = datasets[current];
+    const xs=d.x, ys=d.y;
+    const ymin=Math.min(...ys)-1, ymax=Math.max(...ys)+1;
+    const val = parseFloat(mount.querySelector('#ip-slider').value);
+    mount.querySelector('#ip-val').textContent = val.toFixed(1);
+    let svg = '';
+    const pts = xs.map((x,i)=>sx(x,xs)+','+sy(ys[i],ymin,ymax)).join(' ');
+    svg += '<polyline points="'+pts+'" fill="none" stroke="#5eead4" stroke-width="2" opacity="0.45"/>';
+    svg += '<line x1="'+sx(xs[0],xs)+'" y1="'+sy(ys[0],ymin,ymax)+'" x2="'+sx(xs[xs.length-1],xs)+'" y2="'+sy(ys[ys.length-1],ymin,ymax)+'" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5,4" opacity="0.7"/>';
+    xs.forEach((x,i)=>{ svg += '<circle cx="'+sx(x,xs)+'" cy="'+sy(ys[i],ymin,ymax)+'" r="4" fill="#e9edf1"/>'; });
+    const vx = sx(val,xs);
+    svg += '<line x1="'+vx+'" y1="'+padT+'" x2="'+vx+'" y2="'+(H-padB)+'" stroke="#6d7782" stroke-width="1" stroke-dasharray="2,3"/>';
+    const naiveY = naiveInterp(val,xs,ys);
+    const pieceY = piecewiseInterp(val,xs,ys);
+    svg += '<circle cx="'+vx+'" cy="'+sy(naiveY,ymin,ymax)+'" r="5" fill="#ff6b6b"/>';
+    svg += '<circle cx="'+vx+'" cy="'+sy(pieceY,ymin,ymax)+'" r="5" fill="#5eead4"/>';
+    mount.querySelector('#ip-svg').innerHTML = svg;
+    mount.querySelector('#ip-naive').textContent = naiveY.toFixed(2);
+    mount.querySelector('#ip-piece').textContent = pieceY.toFixed(2);
+  }
+  mount.querySelector('#ip-slider').addEventListener('input', render);
+  mount.querySelector('#ip-linear').addEventListener('click', ()=>{ current='linear'; setActive(); render(); });
+  mount.querySelector('#ip-curved').addEventListener('click', ()=>{ current='curved'; setActive(); render(); });
+  function setActive(){
+    mount.querySelector('#ip-linear').classList.toggle('primary', current==='linear');
+    mount.querySelector('#ip-curved').classList.toggle('primary', current==='curved');
+  }
+  render();
+};
+
+WIDGETS.spiClockModeSim = function(mount){
+  let CPOL = 0, CPHA = 0;
+  mount.innerHTML = `<div class="widget-head"><span>SPI clock modes (CPOL / CPHA)</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:14px; gap:18px;">
+        <div class="row" style="gap:6px;"><span class="readout">CPOL:</span><button class="btn primary" id="spi-pol0">0 (idle low)</button><button class="btn" id="spi-pol1">1 (idle high)</button></div>
+        <div class="row" style="gap:6px;"><span class="readout">CPHA:</span><button class="btn primary" id="spi-pha0">0 (sample leading edge)</button><button class="btn" id="spi-pha1">1 (sample trailing edge)</button></div>
+      </div>
+      <svg viewBox="0 0 600 110" style="width:100%; height:auto;" id="spi-svg"></svg>
+      <div class="readout" id="spi-readout" style="margin-top:10px;"></div>
+    </div>`;
+  function render(){
+    const W=600,H=110,x0=30,period=130,half=period/2,cycles=4;
+    const yHigh=30, yLow=70;
+    const idleY = CPOL ? yHigh : yLow;
+    const activeY = CPOL ? yLow : yHigh;
+    let x = x0;
+    let path = 'M '+x+' '+idleY+' ';
+    const leadingXs = [], trailingXs = [];
+    for(let c=0;c<cycles;c++){
+      leadingXs.push(x);
+      path += 'L '+x+' '+activeY+' ';
+      x += half;
+      path += 'L '+x+' '+activeY+' ';
+      trailingXs.push(x);
+      path += 'L '+x+' '+idleY+' ';
+      x += half;
+      path += 'L '+x+' '+idleY+' ';
+    }
+    const sampleXs = CPHA===0 ? leadingXs : trailingXs;
+    let svg = '<path d="'+path+'" stroke="#5eead4" stroke-width="2.5" fill="none" stroke-linejoin="round"/>';
+    svg += '<text x="'+x0+'" y="16" fill="#6d7782" font-family=\'JetBrains Mono, monospace\' font-size="9">SCLK (idle '+(CPOL?'high':'low')+')</text>';
+    sampleXs.forEach(sx=>{
+      svg += '<polygon points="'+sx+',92 '+(sx-5)+',102 '+(sx+5)+',102" fill="#ffb454"/>';
+    });
+    svg += '<text x="'+x0+'" y="'+(H-2)+'" fill="#ffb454" font-family=\'JetBrains Mono, monospace\' font-size="9">▲ = data sampled here</text>';
+    mount.querySelector('#spi-svg').innerHTML = svg;
+    mount.querySelector('#spi-readout').innerHTML =
+      'Mode '+(CPOL*2+CPHA)+': CPOL='+CPOL+' ('+(CPOL?'idle high, leading edge falls':'idle low, leading edge rises')+'), CPHA='+CPHA+' (data sampled on the '+(CPHA?'trailing':'leading')+' edge of each clock pulse). Both nodes on the bus must agree on this exact combination, or every bit will be sampled at the wrong instant.';
+  }
+  mount.querySelector('#spi-pol0').addEventListener('click', ()=>{ CPOL=0; setActive(); render(); });
+  mount.querySelector('#spi-pol1').addEventListener('click', ()=>{ CPOL=1; setActive(); render(); });
+  mount.querySelector('#spi-pha0').addEventListener('click', ()=>{ CPHA=0; setActive(); render(); });
+  mount.querySelector('#spi-pha1').addEventListener('click', ()=>{ CPHA=1; setActive(); render(); });
+  function setActive(){
+    mount.querySelector('#spi-pol0').classList.toggle('primary', CPOL===0);
+    mount.querySelector('#spi-pol1').classList.toggle('primary', CPOL===1);
+    mount.querySelector('#spi-pha0').classList.toggle('primary', CPHA===0);
+    mount.querySelector('#spi-pha1').classList.toggle('primary', CPHA===1);
+  }
+  render();
+};
+
+WIDGETS.i2cFrameSim = function(mount){
+  mount.innerHTML = `<div class="widget-head"><span>I&sup2;C frame builder</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:14px;">
+        <label class="readout">7-bit slave address: <input type="number" id="i2c-addr" value="72" min="0" max="127" style="width:70px;"></label>
+        <label class="readout">operation: <select id="i2c-rw"><option value="0">write (0)</option><option value="1">read (1)</option></select></label>
+      </div>
+      <div class="row" id="i2c-frame" style="flex-wrap:wrap; gap:4px;"></div>
+      <div class="readout" id="i2c-readout" style="margin-top:12px;"></div>
+    </div>`;
+  function render(){
+    const addr = Math.max(0, Math.min(127, parseInt(mount.querySelector('#i2c-addr').value||0,10)));
+    const rw = parseInt(mount.querySelector('#i2c-rw').value,10);
+    const bits = []; for(let i=6;i>=0;i--) bits.push((addr>>i)&1);
+    const segs = [
+      { label:'START', color:'#a78bfa' },
+      ...bits.map((b,i)=>({label:'A'+(6-i)+':'+b, color:'#5eead4'})),
+      { label: rw? 'R (1)':'W (0)', color:'#ffb454' },
+      { label:'ACK', color:'#ff7ab6' },
+      { label:'… data byte …', color:'#6d7782' },
+      { label:'ACK', color:'#ff7ab6' },
+      { label:'STOP', color:'#a78bfa' },
+    ];
+    const frame = mount.querySelector('#i2c-frame');
+    frame.innerHTML = '';
+    segs.forEach(s=>{
+      const el = document.createElement('div');
+      el.style.cssText = 'padding:8px 10px; border-radius:5px; border:1px solid '+s.color+'; background:'+s.color+'18; color:'+s.color+"; font-family:'JetBrains Mono',monospace; font-size:11px; white-space:nowrap;";
+      el.textContent = s.label;
+      frame.appendChild(el);
+    });
+    mount.querySelector('#i2c-readout').innerHTML =
+      'sending address <b style="color:var(--cyan)">0x'+addr.toString(16).toUpperCase().padStart(2,'0')+'</b> with R/W = <b>'+rw+'</b> ('+(rw?'master will read from the slave':'master will write to the slave')+') — every byte on the bus (the address+R/W byte, then each data byte) is followed by a 1-bit ACK/NACK from whichever side just received it.';
+  }
+  mount.querySelector('#i2c-addr').addEventListener('input', render);
+  mount.querySelector('#i2c-rw').addEventListener('change', render);
+  render();
+};
+
+WIDGETS.pidLiveSim = function(mount){
+  mount.innerHTML = `<div class="widget-head"><span>PID step response</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="gap:18px; flex-wrap:wrap;">
+        <label class="readout">Kp <b id="pid-kp-v">2.0</b><input type="range" id="pid-kp" min="0" max="6" step="0.1" value="2" style="display:block; width:140px;"></label>
+        <label class="readout">Ki <b id="pid-ki-v">0.5</b><input type="range" id="pid-ki" min="0" max="4" step="0.1" value="0.5" style="display:block; width:140px;"></label>
+        <label class="readout">Kd <b id="pid-kd-v">0.20</b><input type="range" id="pid-kd" min="0" max="2" step="0.05" value="0.2" style="display:block; width:140px;"></label>
+      </div>
+      <svg viewBox="0 0 600 220" style="width:100%; height:auto; margin-top:16px;" id="pid-svg"></svg>
+      <div class="readout" id="pid-readout" style="margin-top:8px;"></div>
+    </div>`;
+  const W=600,H=220,padL=36,padR=16,padT=16,padB=26;
+  function simulate(Kp,Ki,Kd){
+    const dt=0.04, steps=150, target=1, friction=1.2, mass=1;
+    let pos=0, vel=0, integral=0, prevErr=0;
+    const out=[];
+    for(let i=0;i<steps;i++){
+      const err = target-pos;
+      integral += err*dt;
+      const deriv = (err-prevErr)/dt;
+      let u = Kp*err + Ki*integral + Kd*deriv;
+      u = Math.max(-8, Math.min(8, u));
+      const accel = (u - friction*vel)/mass;
+      vel += accel*dt; pos += vel*dt;
+      prevErr = err;
+      out.push(pos);
+    }
+    return out;
+  }
+  function render(){
+    const Kp=parseFloat(mount.querySelector('#pid-kp').value);
+    const Ki=parseFloat(mount.querySelector('#pid-ki').value);
+    const Kd=parseFloat(mount.querySelector('#pid-kd').value);
+    mount.querySelector('#pid-kp-v').textContent=Kp.toFixed(1);
+    mount.querySelector('#pid-ki-v').textContent=Ki.toFixed(1);
+    mount.querySelector('#pid-kd-v').textContent=Kd.toFixed(2);
+    const data = simulate(Kp,Ki,Kd);
+    const ymin=-0.5, ymax=2.0;
+    const scaleXf = (i)=> padL + (i/(data.length-1))*(W-padL-padR);
+    const scaleYf = (y)=> H-padB - ((y-ymin)/(ymax-ymin))*(H-padT-padB);
+    let path = 'M '+scaleXf(0)+' '+scaleYf(data[0])+' ';
+    data.forEach((y,i)=>{ path += 'L '+scaleXf(i)+' '+scaleYf(y)+' '; });
+    const targetY = scaleYf(1);
+    let svg = '<line x1="'+padL+'" y1="'+targetY+'" x2="'+(W-padR)+'" y2="'+targetY+'" stroke="#6d7782" stroke-width="1" stroke-dasharray="4,4"/>';
+    svg += '<text x="'+(W-padR)+'" y="'+(targetY-6)+'" fill="#6d7782" font-family=\'JetBrains Mono, monospace\' font-size="9" text-anchor="end">target</text>';
+    svg += '<path d="'+path+'" stroke="#5eead4" stroke-width="2.5" fill="none"/>';
+    mount.querySelector('#pid-svg').innerHTML = svg;
+    const overshoot = Math.max(0, Math.max(...data)-1)*100;
+    const final = data[data.length-1];
+    mount.querySelector('#pid-readout').innerHTML =
+      'overshoot &asymp; <b>'+overshoot.toFixed(0)+'%</b> &nbsp;&middot;&nbsp; final value &asymp; <b>'+final.toFixed(2)+'</b> (target = 1.00)'+
+      (Math.abs(final-1)>0.05 ? ' &mdash; steady-state error visible: try raising Ki' : ' &mdash; settled at target');
+  }
+  ['pid-kp','pid-ki','pid-kd'].forEach(id=> mount.querySelector('#'+id).addEventListener('input', render));
+  render();
+};
+
+WIDGETS.semaphorePoolSim = function(mount){
+  let N = 2;
+  const workers = ['A','B','C'];
+  const colors = {A:'#5eead4', B:'#ffb454', C:'#ff7ab6'};
+  let slots = [];
+  let waiting = [];
+  let wstate = {A:'idle',B:'idle',C:'idle'};
+  mount.innerHTML = `<div class="widget-head"><span>Semaphore resource pool</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:14px; gap:10px;">
+        <span class="readout">semaphore count (N):</span>
+        <button class="btn" id="sem-n1">1</button>
+        <button class="btn primary" id="sem-n2">2</button>
+        <button class="btn" id="sem-n3">3</button>
+      </div>
+      <div class="row" id="sem-slots" style="gap:12px; margin-bottom:18px;"></div>
+      <div class="row" id="sem-workers" style="gap:10px; flex-wrap:wrap;"></div>
+      <div class="readout" id="sem-readout" style="margin-top:14px;"></div>
+    </div>`;
+  function reset(){ slots=[]; waiting=[]; workers.forEach(w=>wstate[w]='idle'); render(); }
+  ['sem-n1','sem-n2','sem-n3'].forEach((id,i)=>{
+    mount.querySelector('#'+id).addEventListener('click', ()=>{
+      N=i+1;
+      ['sem-n1','sem-n2','sem-n3'].forEach((id2,j)=>mount.querySelector('#'+id2).classList.toggle('primary', j===i));
+      reset();
+    });
+  });
+  const workersEl = mount.querySelector('#sem-workers');
+  workers.forEach(w=>{
+    const b = document.createElement('button');
+    b.className='btn'; b.id='sem-w-'+w;
+    b.addEventListener('click', ()=>{
+      if(wstate[w]==='idle'){
+        if(slots.length<N){ slots.push(w); wstate[w]='holding'; }
+        else { waiting.push(w); wstate[w]='waiting'; }
+      } else if(wstate[w]==='holding'){
+        slots = slots.filter(x=>x!==w); wstate[w]='idle';
+        if(waiting.length){ const nxt=waiting.shift(); slots.push(nxt); wstate[nxt]='holding'; }
+      } else if(wstate[w]==='waiting'){
+        waiting = waiting.filter(x=>x!==w); wstate[w]='idle';
+      }
+      render();
+    });
+    workersEl.appendChild(b);
+  });
+  function render(){
+    const slotsEl = mount.querySelector('#sem-slots');
+    slotsEl.innerHTML='';
+    for(let i=0;i<N;i++){
+      const occ = slots[i];
+      const d = document.createElement('div');
+      d.style.cssText = 'width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;'+
+        "font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;transition:all .2s ease;border:2px solid "+
+        (occ?colors[occ]:'#232a32')+';color:'+(occ?colors[occ]:'#6d7782')+';background:'+(occ?colors[occ]+'18':'transparent')+';';
+      d.textContent = occ || '·';
+      slotsEl.appendChild(d);
+    }
+    workers.forEach(w=>{
+      const b = mount.querySelector('#sem-w-'+w);
+      const s = wstate[w];
+      b.textContent = s==='idle' ? ('thread '+w+': sem_wait()') : s==='holding' ? ('thread '+w+': sem_post()') : ('thread '+w+': blocked… (click to cancel)');
+      b.classList.toggle('primary', s==='holding');
+      b.style.borderColor = s==='waiting' ? '#ffb454' : '';
+      b.style.color = s==='waiting' ? '#ffb454' : '';
+    });
+    mount.querySelector('#sem-readout').innerHTML =
+      '<b>'+slots.length+' / '+N+'</b> slots held'+
+      (waiting.length ? ' &nbsp;&middot;&nbsp; <b style="color:#ffb454;">'+waiting.length+' thread(s) blocked in sem_wait()</b>, released in FIFO order as slots free up' : '');
+  }
+  render();
+};
+
+WIDGETS.memHierarchySim = function(mount){
+  const levels = [
+    {name:'CPU Register', cycles:1, color:'#5eead4'},
+    {name:'L1 Cache', cycles:3, color:'#5eead4'},
+    {name:'L2 Cache', cycles:15, color:'#ffb454'},
+    {name:'L3 Cache', cycles:50, color:'#ffb454'},
+    {name:'RAM', cycles:300, color:'#ff7ab6'},
+    {name:'SSD', cycles:100000, color:'#ff6b6b'},
+  ];
+  mount.innerHTML = `<div class="widget-head"><span>Where does the data live?</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="readout" style="margin-bottom:12px;">Pick where the value the CPU needs currently lives, and watch the relative cost (log scale &mdash; the gaps are even bigger than they look):</div>
+      <div class="row" id="mh-buttons" style="gap:8px; flex-wrap:wrap; margin-bottom:18px;"></div>
+      <div id="mh-bars"></div>
+      <div class="readout" id="mh-readout" style="margin-top:12px;"></div>
+    </div>`;
+  const btnRow = mount.querySelector('#mh-buttons');
+  levels.forEach((lv,i)=>{
+    const b=document.createElement('button'); b.className='btn'; b.textContent=lv.name;
+    b.addEventListener('click', ()=>select(i));
+    btnRow.appendChild(b);
+  });
+  const maxLog = Math.log10(levels[levels.length-1].cycles+1);
+  function select(i){
+    Array.from(btnRow.children).forEach((b,j)=>b.classList.toggle('primary', j===i));
+    const bars = mount.querySelector('#mh-bars');
+    bars.innerHTML='';
+    levels.forEach((lv,j)=>{
+      const w = Math.max(2, (Math.log10(lv.cycles+1)/maxLog)*100);
+      const row=document.createElement('div');
+      row.style.cssText='display:flex; align-items:center; gap:10px; margin-bottom:6px;';
+      row.innerHTML = '<div style="width:90px; font-family:\'JetBrains Mono\',monospace; font-size:10.5px; color:var(--text-mute);">'+lv.name+'</div>'+
+        '<div style="flex:1; height:14px; background:#0d1115; border:1px solid var(--border); border-radius:4px; overflow:hidden;"><div style="height:100%; width:'+w+'%; background:'+(j===i?lv.color:'#232a32')+'; transition:width .3s ease;"></div></div>'+
+        '<div style="width:90px; font-family:\'JetBrains Mono\',monospace; font-size:10.5px; color:'+(j===i?lv.color:'var(--text-mute)')+'; text-align:right;">~'+lv.cycles.toLocaleString()+' cyc</div>';
+      bars.appendChild(row);
+    });
+    const lv = levels[i];
+    const regCycles = levels[0].cycles;
+    mount.querySelector('#mh-readout').innerHTML = 'a value in <b style="color:'+lv.color+'">'+lv.name+'</b> costs roughly <b>~'+lv.cycles.toLocaleString()+' CPU cycles</b> to access &mdash; about <b>'+Math.round(lv.cycles/regCycles).toLocaleString()+'&times;</b> slower than reading straight from a register.';
+  }
+  select(1);
+};
+
+WIDGETS.logicGateSim = function(mount){
+  let a = 1, b = 0;
+  mount.innerHTML = `<div class="widget-head"><span>Logic gate truth table</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:16px; gap:18px;">
+        <div class="readout">A = <b id="lg-a">${a}</b></div>
+        <button class="practice-btn" id="lg-toggle-a" style="padding:6px 12px;">toggle A</button>
+        <div class="readout">B = <b id="lg-b">${b}</b></div>
+        <button class="practice-btn" id="lg-toggle-b" style="padding:6px 12px;">toggle B</button>
+      </div>
+      <div id="lg-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(90px,1fr)); gap:10px;"></div>
+    </div>`;
+  const gates = [
+    { name:'AND', sym:'&amp;', fn:(x,y)=>x&y },
+    { name:'OR', sym:'|', fn:(x,y)=>x|y },
+    { name:'XOR', sym:'^', fn:(x,y)=>x^y },
+    { name:'NAND', sym:'~&amp;', fn:(x,y)=>1-(x&y) },
+    { name:'NOR', sym:'~|', fn:(x,y)=>1-(x|y) },
+    { name:'NOT A', sym:'~A', fn:(x)=>1-x },
+  ];
+  function render(){
+    mount.querySelector('#lg-a').textContent = a;
+    mount.querySelector('#lg-b').textContent = b;
+    const grid = mount.querySelector('#lg-grid');
+    grid.innerHTML = '';
+    gates.forEach(g => {
+      const out = g.fn(a,b);
+      const card = document.createElement('div');
+      card.style.cssText = 'border:1px solid var(--border); border-radius:6px; padding:10px; text-align:center; background:var(--bg);';
+      card.innerHTML = '<div class="mono" style="font-size:11px; color:var(--text-mute); margin-bottom:6px;">'+g.name+' ('+g.sym+')</div>'+
+        '<div class="mono" style="font-size:22px; font-weight:700; color:'+(out?'var(--cyan)':'var(--text-mute)')+';">'+out+'</div>';
+      grid.appendChild(card);
+    });
+  }
+  mount.querySelector('#lg-toggle-a').addEventListener('click', () => { a = a?0:1; render(); });
+  mount.querySelector('#lg-toggle-b').addEventListener('click', () => { b = b?0:1; render(); });
+  render();
+};
+
+WIDGETS.stackFrameSim = function(mount){
+  const calls = ['main()','foo()','bar()','baz()'];
+  let depth = 0;
+  mount.innerHTML = `<div class="widget-head"><span>Call stack simulator</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:14px;">
+        <button class="practice-btn" id="sf-call" style="padding:8px 14px;">Step: call &darr;</button>
+        <button class="practice-btn" id="sf-ret" style="padding:8px 14px;">Step: return &uarr;</button>
+        <div class="readout" style="margin-left:auto;">Frames alive: <b id="sf-depth">0</b></div>
+      </div>
+      <div id="sf-stack" style="display:flex; flex-direction:column-reverse; gap:6px; min-height:160px; border:1px dashed var(--border); border-radius:6px; padding:10px;"></div>
+    </div>`;
+  const stackEl = mount.querySelector('#sf-stack');
+  const callBtn = mount.querySelector('#sf-call');
+  const retBtn = mount.querySelector('#sf-ret');
+  function render(){
+    mount.querySelector('#sf-depth').textContent = depth;
+    stackEl.innerHTML = '';
+    for(let i=0;i<depth;i++){
+      const frame = document.createElement('div');
+      const top = i === depth-1;
+      frame.className = 'mono';
+      frame.style.cssText = 'padding:9px 12px; border-radius:5px; border:1px solid '+(top?'var(--cyan)':'var(--border)')+'; background:'+(top?'rgba(94,234,212,.08)':'var(--bg)')+'; font-size:12.5px; color:'+(top?'var(--cyan)':'var(--text-dim)')+';';
+      frame.textContent = calls[i] + (top ? '  ← currently executing' : '');
+      stackEl.appendChild(frame);
+    }
+    callBtn.disabled = depth >= calls.length;
+    retBtn.disabled = depth <= 0;
+  }
+  callBtn.addEventListener('click', () => { if(depth < calls.length) depth++; render(); });
+  retBtn.addEventListener('click', () => { if(depth > 0) depth--; render(); });
+  render();
+};
+
+WIDGETS.memoryMapSim = function(mount){
+  const regions = [
+    { name:'Code (Flash)', lo:0x00000000, hi:0x1FFFFFFF, color:'var(--amber)' },
+    { name:'SRAM', lo:0x20000000, hi:0x3FFFFFFF, color:'var(--cyan)' },
+    { name:'Peripheral', lo:0x40000000, hi:0xDFFFFFFF, color:'var(--pink)' },
+    { name:'System', lo:0xE0000000, hi:0xFFFFFFFF, color:'var(--violet)' },
+  ];
+  const presets = ['0x08001000','0x20003F00','0x40021400','0xE000E100'];
+  mount.innerHTML = `<div class="widget-head"><span>Address space lookup</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:14px; flex-wrap:wrap;">
+        ${presets.map(p=>`<button class="practice-btn mm-preset" data-addr="${p}" style="padding:7px 12px;">${p}</button>`).join('')}
+        <input type="text" id="mm-input" placeholder="0x..." style="width:130px;">
+        <button class="practice-btn" id="mm-go" style="padding:7px 12px;">Look up</button>
+      </div>
+      <div id="mm-rows"></div>
+      <div class="readout" id="mm-result" style="margin-top:10px;">Click an address or enter your own.</div>
+    </div>`;
+  const rows = mount.querySelector('#mm-rows');
+  regions.forEach(r => {
+    const row = document.createElement('div');
+    row.id = 'mm-row-'+r.name.replace(/[^a-zA-Z]/g,'');
+    row.style.cssText = 'display:flex; gap:10px; align-items:center; padding:8px 10px; border:1px solid var(--border); border-radius:5px; margin-bottom:6px;';
+    row.innerHTML = '<div style="width:14px;height:14px;border-radius:3px;background:'+r.color+';flex-shrink:0;"></div>'+
+      '<div class="mono" style="font-size:12px; width:120px; color:var(--text-dim);">'+r.name+'</div>'+
+      '<div class="mono" style="font-size:11px; color:var(--text-mute);">0x'+r.lo.toString(16).toUpperCase().padStart(8,'0')+' &ndash; 0x'+r.hi.toString(16).toUpperCase().padStart(8,'0')+'</div>';
+    rows.appendChild(row);
+  });
+  function lookup(addrStr){
+    const addr = parseInt(addrStr,16);
+    const result = mount.querySelector('#mm-result');
+    Array.from(rows.children).forEach(r => r.style.outline = 'none');
+    if (isNaN(addr)){ result.textContent = 'Enter a valid hex address, e.g. 0x40000000.'; return; }
+    const region = regions.find(r => addr >= r.lo && addr <= r.hi);
+    if (region){
+      const rowEl = mount.querySelector('#mm-row-'+region.name.replace(/[^a-zA-Z]/g,''));
+      rowEl.style.outline = '2px solid '+region.color;
+      result.innerHTML = '0x'+addr.toString(16).toUpperCase()+' falls in <b style="color:'+region.color+'">'+region.name+'</b>.';
+    } else {
+      result.textContent = 'Address out of the typical 32-bit range.';
+    }
+  }
+  mount.querySelectorAll('.mm-preset').forEach(b => b.addEventListener('click', () => lookup(b.dataset.addr)));
+  mount.querySelector('#mm-go').addEventListener('click', () => lookup(mount.querySelector('#mm-input').value));
+};
+
+WIDGETS.nvicPrioritySim = function(mount){
+  const sources = [
+    { name:'Low-priority ISR A', pri:3, color:'var(--text-mute)' },
+    { name:'Low-priority ISR B', pri:3, color:'var(--violet)' },
+    { name:'High-priority ISR', pri:1, color:'var(--red)' },
+  ];
+  let running = []; // stack of currently nested ISRs (by index into sources)
+  let pending = [];
+  let log = [];
+  mount.innerHTML = `<div class="widget-head"><span>NVIC preemption simulator</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:14px; flex-wrap:wrap;">
+        ${sources.map((s,i)=>`<button class="practice-btn np-fire" data-i="${i}" style="padding:7px 12px; border-color:${s.color}; color:${s.color};">Fire: ${s.name} (pri ${s.pri})</button>`).join('')}
+        <button class="practice-skip" id="np-finish">finish top ISR</button>
+        <button class="practice-skip" id="np-reset">reset</button>
+      </div>
+      <div class="readout" style="margin-bottom:8px;">Nesting depth (running, top = active): <b id="np-depth">0</b></div>
+      <div id="np-stack" style="display:flex; flex-direction:column-reverse; gap:6px; min-height:70px; border:1px dashed var(--border); border-radius:6px; padding:10px; margin-bottom:10px;"></div>
+      <div class="readout">Pending (waiting their turn): <b id="np-pending">none</b></div>
+      <div id="np-log" class="mono" style="margin-top:10px; font-size:11px; color:var(--text-mute); max-height:120px; overflow-y:auto; line-height:1.7;"></div>
+    </div>`;
+  function render(){
+    const stackEl = mount.querySelector('#np-stack');
+    stackEl.innerHTML = '';
+    running.forEach((si,depth) => {
+      const s = sources[si];
+      const top = depth === running.length-1;
+      const f = document.createElement('div');
+      f.className = 'mono';
+      f.style.cssText = 'padding:9px 12px; border-radius:5px; border:1px solid '+s.color+'; background:'+(top?'rgba(94,234,212,.06)':'var(--bg)')+'; font-size:12px; color:'+s.color+';';
+      f.textContent = s.name + (top ? '  ← running now' : '  (preempted, paused)');
+      stackEl.appendChild(f);
+    });
+    mount.querySelector('#np-depth').textContent = running.length;
+    mount.querySelector('#np-pending').textContent = pending.length ? pending.map(i=>sources[i].name).join(', ') : 'none';
+    mount.querySelector('#np-log').innerHTML = log.slice(-8).map(l=>'&gt; '+l).join('<br>');
+  }
+  function fire(i){
+    const s = sources[i];
+    if (running.length === 0){
+      running.push(i); log.push(s.name+' starts running.');
+    } else {
+      const topPri = sources[running[running.length-1]].pri;
+      if (s.pri < topPri){
+        running.push(i); log.push(s.name+' PREEMPTS the running ISR (higher priority).');
+      } else {
+        pending.push(i); log.push(s.name+' arrives but waits — running ISR is equal or higher priority.');
+      }
+    }
+    render();
+  }
+  mount.querySelectorAll('.np-fire').forEach(b => b.addEventListener('click', () => fire(parseInt(b.dataset.i))));
+  mount.querySelector('#np-finish').addEventListener('click', () => {
+    if (running.length === 0) return;
+    const done = running.pop();
+    log.push(sources[done].name+' finishes and returns.');
+    if (running.length === 0 && pending.length){
+      const next = pending.shift();
+      running.push(next);
+      log.push(sources[next].name+' now starts from the pending queue.');
+    }
+    render();
+  });
+  mount.querySelector('#np-reset').addEventListener('click', () => { running=[]; pending=[]; log=[]; render(); });
+  render();
+};
+
+WIDGETS.filterSim = function(mount){
+  const raw = [12,45,18,52,22,48,15,55,20,50,17,46,24,53,19,49];
+  let win = 4;
+  mount.innerHTML = `<div class="widget-head"><span>Moving-average filter</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:10px;">
+        <label class="mono" style="font-size:12px; color:var(--text-dim);">Window size: <b id="fs-win" style="color:var(--cyan);">${win}</b></label>
+        <input type="range" id="fs-range" min="1" max="10" value="${win}" style="flex:1; min-width:140px;">
+      </div>
+      <div class="mono" style="font-size:10.5px; color:var(--text-mute); margin-bottom:4px;">raw (noisy)</div>
+      <div id="fs-raw" style="display:flex; align-items:flex-end; gap:3px; height:70px; margin-bottom:14px;"></div>
+      <div class="mono" style="font-size:10.5px; color:var(--text-mute); margin-bottom:4px;">filtered</div>
+      <div id="fs-filtered" style="display:flex; align-items:flex-end; gap:3px; height:70px;"></div>
+    </div>`;
+  const maxV = Math.max(...raw);
+  function bars(container, values, color){
+    const el = mount.querySelector(container);
+    el.innerHTML = '';
+    values.forEach(v => {
+      const bar = document.createElement('div');
+      const h = Math.max(3, (v/maxV)*100);
+      bar.style.cssText = 'flex:1; height:'+h+'%; background:'+color+'; border-radius:2px 2px 0 0;';
+      el.appendChild(bar);
+    });
+  }
+  function smooth(n){
+    return raw.map((_,i) => {
+      const start = Math.max(0, i-n+1);
+      const slice = raw.slice(start, i+1);
+      return slice.reduce((a,b)=>a+b,0)/slice.length;
+    });
+  }
+  function render(){
+    bars('#fs-raw', raw, 'var(--text-mute)');
+    bars('#fs-filtered', smooth(win), 'var(--cyan)');
+    mount.querySelector('#fs-win').textContent = win;
+  }
+  mount.querySelector('#fs-range').addEventListener('input', e => { win = parseInt(e.target.value); render(); });
+  render();
+};
+
+WIDGETS.cacheMapSim = function(mount){
+  let mode = 'direct';
+  let directLines = new Array(8).fill(null);
+  let setLines = new Array(4).fill(null).map(()=>[]); // 4 sets, 2 ways
+  let log = [];
+  const addrs = [3,4,11,12,19,20,7,15];
+  mount.innerHTML = `<div class="widget-head"><span>Cache mapping simulator</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:12px;">
+        <button class="btn primary cm-mode" data-m="direct" style="padding:7px 12px;">Direct-mapped (8 lines)</button>
+        <button class="btn cm-mode" data-m="set" style="padding:7px 12px;">2-way set-associative (4 sets)</button>
+        <button class="practice-skip" id="cm-reset">reset</button>
+      </div>
+      <div class="row" style="margin-bottom:12px; flex-wrap:wrap;">
+        ${addrs.map(a=>`<button class="practice-btn cm-addr" data-a="${a}" style="padding:6px 11px;">block ${a}</button>`).join('')}
+      </div>
+      <div id="cm-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;"></div>
+      <div class="readout" id="cm-result" style="margin-top:10px;">Pick a mapping mode, then click block numbers to access them.</div>
+    </div>`;
+  function renderGrid(){
+    const grid = mount.querySelector('#cm-grid');
+    grid.innerHTML = '';
+    mount.querySelectorAll('.cm-mode').forEach(b => b.classList.toggle('primary', b.dataset.m === mode));
+    if (mode === 'direct'){
+      directLines.forEach((v,i) => {
+        const cell = document.createElement('div');
+        cell.style.cssText = 'border:1px solid var(--border); border-radius:5px; padding:10px; text-align:center; background:var(--bg);';
+        cell.innerHTML = '<div class="mono" style="font-size:10px; color:var(--text-mute);">line '+i+'</div><div class="mono" style="font-size:15px; color:'+(v!==null?'var(--cyan)':'var(--text-mute)')+';">'+(v!==null?v:'\u2014')+'</div>';
+        grid.appendChild(cell);
+      });
+    } else {
+      setLines.forEach((ways,si) => {
+        const cell = document.createElement('div');
+        cell.style.cssText = 'border:1px solid var(--border); border-radius:5px; padding:10px; text-align:center; background:var(--bg);';
+        cell.innerHTML = '<div class="mono" style="font-size:10px; color:var(--text-mute);">set '+si+'</div><div class="mono" style="font-size:13px; color:var(--cyan);">'+(ways.length?ways.join(' / '):'\u2014')+'</div>';
+        grid.appendChild(cell);
+      });
+    }
+  }
+  function access(addr){
+    const result = mount.querySelector('#cm-result');
+    if (mode === 'direct'){
+      const idx = addr % 8;
+      const hit = directLines[idx] === addr;
+      const evicted = directLines[idx];
+      directLines[idx] = addr;
+      result.innerHTML = hit ? ('block <b>'+addr+'</b> &rarr; line <b>'+idx+'</b>: <span style="color:var(--cyan)">HIT</span>')
+        : ('block <b>'+addr+'</b> &rarr; line <b>'+idx+'</b>: <span style="color:var(--red)">MISS</span>'+(evicted!==null?' (evicted block '+evicted+')':''));
+    } else {
+      const sIdx = addr % 4;
+      const ways = setLines[sIdx];
+      const hit = ways.includes(addr);
+      if (!hit){
+        if (ways.length < 2) ways.push(addr);
+        else { const evicted = ways.shift(); ways.push(addr); }
+      }
+      result.innerHTML = hit ? ('block <b>'+addr+'</b> &rarr; set <b>'+sIdx+'</b>: <span style="color:var(--cyan)">HIT</span>')
+        : ('block <b>'+addr+'</b> &rarr; set <b>'+sIdx+'</b>: <span style="color:var(--red)">MISS</span> (now cached in that set)');
+    }
+    renderGrid();
+  }
+  mount.querySelectorAll('.cm-mode').forEach(b => b.addEventListener('click', () => { mode = b.dataset.m; renderGrid(); }));
+  mount.querySelectorAll('.cm-addr').forEach(b => b.addEventListener('click', () => access(parseInt(b.dataset.a))));
+  mount.querySelector('#cm-reset').addEventListener('click', () => { directLines.fill(null); setLines = new Array(4).fill(null).map(()=>[]); renderGrid(); mount.querySelector('#cm-result').textContent = 'Reset.'; });
+  renderGrid();
+};
+
+WIDGETS.debounceSim = function(mount){
+  let pressed = false;
+  let state = 'IDLE';
+  let log = [];
+  mount.innerHTML = `<div class="widget-head"><span>Button debounce simulator</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:14px;">
+        <button class="practice-btn" id="db-bounce" style="padding:8px 14px;">Simulate a noisy physical press (bounces)</button>
+        <button class="practice-skip" id="db-reset">reset</button>
+      </div>
+      <div class="row" style="gap:18px; margin-bottom:12px;">
+        <div class="readout">FSM state: <b id="db-state" style="color:var(--amber)">IDLE</b></div>
+        <div class="readout">Confirmed presses reported: <b id="db-count">0</b></div>
+      </div>
+      <div id="db-log" class="mono" style="font-size:11px; color:var(--text-mute); max-height:140px; overflow-y:auto; line-height:1.7; border:1px dashed var(--border); border-radius:6px; padding:10px;"></div>
+    </div>`;
+  let count = 0;
+  function pushLog(msg){ log.push(msg); mount.querySelector('#db-log').innerHTML = log.slice(-12).map(l=>'&gt; '+l).join('<br>'); }
+  function setState(s){ state = s; mount.querySelector('#db-state').textContent = s; mount.querySelector('#db-state').style.color = s==='PRESSED' ? 'var(--cyan)' : (s==='DEBOUNCE' ? 'var(--pink)' : 'var(--amber)'); }
+  mount.querySelector('#db-bounce').addEventListener('click', () => {
+    if (state !== 'IDLE') return;
+    pushLog('Raw pin: first edge detected (contact bounce begins).');
+    setState('DEBOUNCE');
+    pushLog('FSM \u2192 DEBOUNCE: ignoring further raw transitions for the settle window.');
+    const bounces = 3 + Math.floor(Math.random()*3);
+    for(let i=0;i<bounces;i++) pushLog('  (raw pin glitch #'+(i+1)+' \u2014 ignored, window still active)');
+    setTimeout(() => {
+      setState('PRESSED');
+      count++; mount.querySelector('#db-count').textContent = count;
+      pushLog('Settle window elapsed, pin still low \u2192 FSM \u2192 PRESSED: one clean press reported.');
+      setTimeout(() => { setState('IDLE'); pushLog('Button released \u2192 FSM \u2192 IDLE, ready for next press.'); }, 900);
+    }, 900);
+  });
+  mount.querySelector('#db-reset').addEventListener('click', () => { state='IDLE'; count=0; log=[]; setState('IDLE'); mount.querySelector('#db-count').textContent = 0; mount.querySelector('#db-log').innerHTML=''; });
+};
+
+WIDGETS.raceConditionSim = function(mount){
+  let shared = 0;
+  let log = [];
+  let protect = false;
+  mount.innerHTML = `<div class="widget-head"><span>Race condition visualizer</span><span class="live"><span class="dot"></span>live</span></div>
+    <div class="widget-body">
+      <div class="row" style="margin-bottom:12px;">
+        <button class="practice-btn" id="rc-run-unsafe" style="padding:8px 14px;">Run 2 tasks unsynchronized: shared_counter++ &times;5 each</button>
+        <button class="practice-btn" id="rc-run-safe" style="padding:8px 14px;">Run with a critical section</button>
+        <button class="practice-skip" id="rc-reset">reset</button>
+      </div>
+      <div class="readout" style="margin-bottom:10px;">shared_counter = <b id="rc-val" style="color:var(--cyan);">0</b> &nbsp;(expected: 10)</div>
+      <div id="rc-log" class="mono" style="font-size:11px; color:var(--text-mute); max-height:160px; overflow-y:auto; line-height:1.7; border:1px dashed var(--border); border-radius:6px; padding:10px;"></div>
+    </div>`;
+  function pushLog(msg){ log.push(msg); mount.querySelector('#rc-log').innerHTML = log.slice(-14).map(l=>'&gt; '+l).join('<br>'); }
+  function run(safe){
+    shared = 0; log = [];
+    mount.querySelector('#rc-val').textContent = 0;
+    pushLog(safe ? 'Both tasks wrap the read-modify-write in a critical section (disable/enable IRQ around it).' : 'Two tasks each do shared_counter++ five times \u2014 each increment is really a READ then a WRITE, with NO locking.');
+    // Build a sequence of micro-ops: each increment is a (read, write) pair tagged with the task's locally-cached value.
+    let regA = null, regB = null;
+    let microOps = [];
+    for(let i=0;i<5;i++){ microOps.push({task:'A',op:'read'}); microOps.push({task:'A',op:'write'}); microOps.push({task:'B',op:'read'}); microOps.push({task:'B',op:'write'}); }
+    if (!safe){
+      // shuffle, but keep each task's own ops in order relative to each other (only interleave across tasks)
+      const aOps = microOps.filter(o=>o.task==='A'), bOps = microOps.filter(o=>o.task==='B');
+      microOps = [];
+      let ai=0, bi=0;
+      while(ai<aOps.length || bi<bOps.length){
+        if (ai<aOps.length && (Math.random()<0.5 || bi>=bOps.length)){ microOps.push(aOps[ai]); ai++; }
+        else { microOps.push(bOps[bi]); bi++; }
+      }
+    } else {
+      // critical section: force each read+write pair to happen back-to-back, uninterrupted
+      microOps = [];
+      for(let i=0;i<5;i++){ microOps.push({task:'A',op:'read'}); microOps.push({task:'A',op:'write'}); }
+      for(let i=0;i<5;i++){ microOps.push({task:'B',op:'read'}); microOps.push({task:'B',op:'write'}); }
+    }
+    let i = 0;
+    function step(){
+      if (i >= microOps.length){
+        pushLog('Done. Final shared_counter = '+shared+(shared===10?' \u2014 matches the expected 10.':' \u2014 LOST UPDATE(S)! Expected 10 \u2014 a write overwrote another task\u2019s unseen increment.'));
+        return;
+      }
+      const m = microOps[i];
+      if (m.op === 'read'){
+        if (m.task === 'A') regA = shared; else regB = shared;
+        pushLog('Task'+m.task+': reads shared_counter \u2192 '+shared+' into its local register.');
+      } else {
+        const localVal = m.task === 'A' ? regA : regB;
+        shared = localVal + 1;
+        pushLog('Task'+m.task+': writes back '+localVal+' + 1 = '+shared+'.');
+      }
+      mount.querySelector('#rc-val').textContent = shared;
+      i++;
+      setTimeout(step, 200);
+    }
+    step();
+  }
+  mount.querySelector('#rc-run-unsafe').addEventListener('click', () => run(false));
+  mount.querySelector('#rc-run-safe').addEventListener('click', () => run(true));
+  mount.querySelector('#rc-reset').addEventListener('click', () => { shared=0; log=[]; mount.querySelector('#rc-val').textContent=0; mount.querySelector('#rc-log').innerHTML=''; });
+};
+
+
 (async function init(){
   await loadProgress();
   renderAll();
